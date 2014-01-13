@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Introduksjon til Funksjonell Reaktiv Programmering</title>
+
+    <meta name="description" content="Foredrag om bruk av Bacon.js og Funksjonell Reaktiv Programmering">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="lib/js/jquery.js"></script>
+    <script type="text/javascript" src="lib/js/bacon.js"></script>
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <img src="img/moustache.svg" alt="Bart" class="no-style" />
+          <h2>Introduksjon til Funksjonell Reaktiv Programmering (FRP)</h2>
+          <p>
+            Av <a href="http://twitter.com/mikaelbrevik">@mikaelbrevik</a> for første <a href="http://bartjs.github.io">Bart.JS</a> Meetup 4. februar.
+          </p>
+        </section>
+
+        <section >
+          <h3><em>Advarsel: Nå blir det gult</em></h3>
+        </section>
+
+        <section data-background="#f0db4f" class="bartjs-logo">
+          <object data="http://bartjs.github.io/assets/logo.svg" type="image/svg+xml">logo</object>
+        </section>
+
+        <section class="about-me">
+          <div class="about-description">
+            <h2>Mikael Brevik</h2>
+            <ul>
+              <li>Konsulent hos BEKK</li>
+              <li>Bachelor fra HIST (2011), Master fra NTNU (2013).</li>
+            </ul>
+            <p>Tidvis open source utvikler og standhaftig surfer på internett. Er å finne på Github som <a href="https://github.com/mikaelbr">@mikaelbr</a> og Twitter <a href="http://twitter.com/mikaelbrevik">@mikaelbrevik</a>. Regelmessig googler og Stackoverflow-leser.</p>
+          </div>
+          <div class="avatar">
+            <img src="img/mikaelbrevik.jpeg" alt="Mikael Brevik" />
+            <!-- <img src="https://intern.bekk.no/Employees/ViewEmployeeImage.ashx?thumbnail=true&amp;thumbsize=235&amp;employee=630"> -->
+          </div>
+        </section>
+
+        <section>
+            <h2>Agenda</h2>
+            <ol>
+                <li class="fragment">Teoretisk perspektiv</li>
+                <li class="fragment">Bacon.js</li>
+                <li class="fragment">Livekoding og magi</li>
+            </ol>
+        </section>
+
+        <section>
+            <h3>Hva er Functional Reactive Programming?</h3>
+            <p>Kombinasjonen mellom to paradigmer:</p>
+            <ol>
+                <li>Funksjonell programmering</li>
+                <li>Reaktiv programmering</li>
+            </ol>
+        </section>
+
+        <section>
+          <section>
+            <h2>Funksjonell programmering</h2>
+            <aside class="notes">
+              <p>De fleste her kjenner sikkert til funksjonell programmering av en eller annen grad, men vi skal gå kjapt igjennom hva det er.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>En deklarativ programmeringsparadigme med funksjoner i fokus.</h3>
+            <h4>Unngår tilstander og mutable objekter.</h4>
+            <aside class="notes">
+              <p>Handler om hvilken input et system får, i motsetning til hvilken tilstand systemet har. Gitt at input alltid er lik, vil også output bli like - altså rene (pure) funksjoner.</p>
+              <p>Ettersom funksjonell programmering skal hindre bieffekter, opererer det gjerne med immutable objekter (objekter/verdier som ikke kan endres).</p>
+            </aside>
+          </section>
+          <section>
+            <h4>Deklarativ programmering forklarer hva som skjer.</h4>
+            <h4>Imperativ programmering forklarer hvordan det skal skje!</h4>
+            <aside class="notes">
+              <p>Deklarativ programmering opererer som regel med utrykk (expressions) som kan evalueres til verdier, fremfor erklæringer (statements) som forklarer fremgangsmåte.</p>
+              <p>Markup som HTML kan sees som deklarativt, ettersom vi definerer hva vi vil ha, ikke hvordan vi skal ha det.</p>
+              <p>Eksempel: I imperativ programmering ville vi ha iterert over verdier med en for-løkke og endret verdiene i løkke-kroppen. I deklarativ programmering vil vi typisk sende med en første-klasses høyere ordens funksjon (funksjoner som kan sendes som argument til andre funksjoner - høyere ordens funksjoner: funksjoner som kan returnere andre funksjoner) som kjøres rekursivt (head | rest...) over en sekvens og returnerer en ny sekvens med det transformerte innholdet.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Unngår uønskede bieffekter med bruk av rene funksjoner</h3>
+            <aside class="notes">
+              <p>Der et funksjonskall påvirker systemet på annet måte enn kun det funksjonskallet returnerer.</p>
+              <p>F.eks endringer på statiske/globale variabler i en funksjon. Dette påvirker systemet/tilstanden til systemet.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Vanlig med bruk av blant annet <code>map</code>, <code>reduce</code> og <code>filter</code>.</h3>
+            <h4 class="fragment">Eksempler på språk kan være Lisp, Haskell, Scala, men også JavaScript</h4>
+            <aside class="notes">
+              <p>Map tar inn et en sekvens og en høyere ordens funksjon, returnerer en ny sekvens der alle elementer i sekvensen er blitt kjørt via innsendt funksjon.</p>
+              <p>Reduce kjører rekursivt over en sekvens og evaluerer en høyere ordens funksjon som tar inn resultatet fra forrige kjøring og gjeldene element i sekvensen. Ved første iterasjon vil verdien fra første kjøring være satt til en initiell verdi.</p>
+              <p>Filter vil og kjøres rekursivt og ta inn en sekvens og et predikat (predikat kan forklares som noe som returnerer true/false basert på argumenter) og returnerer en ny sekvens kun med de elementene som oppfyller predikatet.</p>
+
+              <p>Ikke alle språkene er 100% funksjonelle, da de tillater mutable objekter og bieffekter, men kan brukes funksjonelt og har støtte for første-klasses høyere-ordens funksjoner.</p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section><h2>Reaktiv programmering</h2></section>
+          <section>
+            <h3>Kan beskrives som en metode for å holde systemet kontinuerlig oppdatert med omgivelsene.</h3>
+            <aside class="notes">
+              <p>Kalles ofte dataflyt (dataflow) programmering.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>En måte for data å reagere på endringer og oppdatere for å reflektere disse endringene.</h3>
+            <aside class="notes">
+              <p>Gitt at du har variabeler med avhengigheter (f.eks c = a * b), dersom A endres, vil endringene propagere i dataflyt grafen og oppdatere de verdiene som er avhengig av variabel A (i dette tilfellet verdien C).</p>
+              <p>Det kan være flere nivå av avhengigheter og komplekse dataflyt grafer.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Et eksempel på reaktiv data kan være et regneark og summen av to tall.</h3>
+            <aside class="notes">
+              <p>I Excel, om en har 5 verdier i kolonne A, og en celle som har SUM(A1:A5), vil summen oppdateres dersom en av cellene i kolonne A blir endret.</p>
+              <p>Dette er enkle eksempler på reaktivitet, men det kan også brukes i større komplekse sammenhenger, særlig med brukerinteraksjoner og animasjoner.</p>
+            </aside>
+          </section>
+          <section>
+            <div class="dataflow-example">
+              <input type="number" id="a" value="3" class="node-a"/>
+              <input type="number" id="b" value="2" class="node-b"/>
+              <input type="text" id="sum" value="0" disabled="" class="node-result"/>
+            </div>
+
+            <script>
+              (function () {
+                var _add = function (a, b) { return a + b; },
+                    _value = function (e) { return e.currentTarget.value; },
+                    getInputAsProperty = function (id) {
+                      var $el = $(id);
+                      return $el.asEventStream("change")
+                                .map(_value)
+                                .toProperty($el.val())
+                                .map(Number);
+                    };
+
+                var $a = getInputAsProperty("#a"),
+                    $b = getInputAsProperty("#b");
+
+                $a.combine($b, _add).assign($("#sum"), "val");
+              })();
+            </script>
+          </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Praktisk FRP</h1>
+          <h2>Enter Bacon.js</h2>
+          <aside class="notes">
+            <p>Bacon.js er et bibliotek for Javascript som har et fabelaktig navn.</p>
+          </aside>
+        </section>
+        <section>
+          <h3>I Bacon.js har adferd og hendelser andre navn.</h3>
+          <h4>En adferd kalles en Property og hendelse en EventStream.</h4>
+          <aside class="notes">
+            <p>Det er litt annen terminologi i Bacon.js.</p>
+          </aside>
+        </section>
+        <section>
+          <h3>I Bacon.js innkapsler vi datakilder som reaktive datatyper.</h3>
+          <ul>
+            <li class="fragment"><code>fromEventTarget</code></li>
+            <li class="fragment"><code>fromPromise</code></li>
+            <li class="fragment"><code>fromCallback</code></li>
+            <li class="fragment">...med flere</li>
+          </ul>
+          <aside class="notes">
+            <p>fromEventTarget baserer seg på "on"-funksjon. Det vil si vi kan ta inn f.eks EventEmitter API-et eller jQuery events.</p>
+            <p>fromPromise tar inn et objekt fra Promise API-et, f.eks jqHXR (jQuery Ajax kall) eller Node Promises.</p>
+            <p>fromCallback lager en eventstream fra et callback – kan også brukes i Node.js</p>
+            <p>En kan også innkapsle f.eks konstanter eller lister, eller f.eks basert på intervall.</p>
+          </aside>
+        </section>
+        <section>
+          <h3>Alt i Bacon.js er ren javascript.</h3>
+          <p>I knockout.js er deklarativiteten i markup, og ikke i javascripten.</p>
+
+          <aside class="notes">
+            <p>Bacon.js vil altså føre til at javascripten også blir deklarativ.</p>
+          </aside>
+        </section>
+      </section>
+
+      <section class="vote-example">
+        <section>
+          <h1>Live-koding<h1>
+          <h2>Flerbrukers chatte-system</h2>
+        </section>
+        <section><h3>Vi skal lage en enkel chat-klient basert på WebSockets</h3></section>
+      </section>
+
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 1100px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
