@@ -1,0 +1,38 @@
+{
+  "name": "frp-livecode",
+  "version": "0.0.0",
+  "description": "Live code from a presentation on http://bartjs.github.io",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "./node_modules/gulp/bin/gulp.js build --production",
+    "dev": "./node_modules/gulp/bin/gulp.js --dev"
+  },
+  "author": "Mikael Brevik",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-livereload": "~0.2.0",
+    "tiny-lr": "0.0.5",
+    "gulp-concat": "~2.1.7",
+    "gulp": "~3.3.2",
+    "gulp-browserify": "~0.3.3",
+    "gulp-less": "~1.1.10",
+    "gulp-minify-css": "~0.2.0",
+    "gulp-notify": "~0.3.4-2",
+    "gulp-if": "0.0.4",
+    "gulp-embedlr": "~0.5.2",
+    "gulp-imagemin": "~0.1.4",
+    "nodemon": "~1.0.13"
+  },
+  "dependencies": {
+    "ecstatic": "~0.4.13",
+    "socket.io": "~0.9.16",
+    "socket.io-client": "~0.9.16",
+    "baconjs": "~0.7.2",
+    "lodash.template": "~2.4.1",
+    "jquery-browserify": "~1.8.1",
+    "lodash.toarray": "~2.4.1",
+    "lodash": "~2.4.1",
+    "humanize": "0.0.9"
+  }
+}
