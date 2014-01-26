@@ -32,7 +32,7 @@ module.exports.notJoinMessage = function (val) {
 };
 
 module.exports.toUsername = function (val) {
-  return joinRegex.exec(val)[0];
+  return joinRegex.exec(val)[1];
 };
 
 module.exports.renderOnline = function (allUsers) {
