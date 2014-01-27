@@ -34,7 +34,7 @@ Chat.prototype.join = function (username) {
     return this.emit('error', new Error('Not connected yet.'));
   }
   if (this.username) {
-    return this.emit('error', new Error('Already connected and logged in as' + this.username));
+    return this.emit('error', new Error('Already connected and logged in as ' + this.username));
   }
 
   this.username = username;
@@ -45,7 +45,7 @@ Chat.prototype.join = function (username) {
 
 Chat.prototype.message = function (message) {
   if (!this.connected || !this.username) {
-    return this.emit('error', new Error('Not connected yet. Join by using /join "username"'));
+    return this.emit('error', new Error('Not connected yet. Join by using /join <username>'));
   }
   if (!message) {
     return this.emit('error', new Error('No message given.'));

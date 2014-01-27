@@ -33,6 +33,7 @@
     "jquery-browserify": "~1.8.1",
     "lodash.toarray": "~2.4.1",
     "lodash": "~2.4.1",
-    "humanize": "0.0.9"
+    "humanize": "0.0.9",
+    "gulp": "~3.5.0"
   }
 }

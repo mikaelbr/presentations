@@ -8,7 +8,7 @@ var $ = require('jquery-browserify'),
 var message = bacon.fromEventTarget(chat, 'message');
 var errors = bacon.fromEventTarget(chat, 'error');
 var users = bacon.fromEventTarget(chat, 'join');
-var usersIn = bacon.fromPromise($.ajax("/users"))
+var onlineUsers = bacon.fromPromise($.ajax("/users"));
 var part = bacon.fromEventTarget(chat, 'part')
   .filter(function (user) {
     return !!user;
@@ -25,7 +25,7 @@ part.onValue(function (user) {
 var errorHtml = errors
   .map(h.template.error);
 
-usersIn
+onlineUsers
   .map(h.renderOnline)
   .assign($('.users'), 'html');
 
@@ -41,9 +41,9 @@ newMessages
 var newUser = users
   .map(h.toUserObject)
   .map(h.template.users)
-  .onValue(function (el) {
-    $('.users').append(el);
-  });
+  .assign($('.users'), 'append');
+
+
 
 // ---
 var enter = bacon

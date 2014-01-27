@@ -27,6 +27,16 @@ gulp.task('scripts', function() {
         .pipe(refresh(lrserver));
 });
 
+gulp.task('step1', function() {
+    return gulp.src(['app/src/_stepwise.js'])
+        .pipe(browserify())
+        .on('error', notify.onError())
+        .pipe(concat('_stepwise.js'))
+        .on('error', notify.onError())
+        .pipe(gulp.dest('dist/build'))
+        .pipe(refresh(lrserver));
+});
+
 gulp.task('styles', function() {
     return gulp.src(['app/css/style.less'])
         .pipe(less())
@@ -72,11 +82,11 @@ gulp.task('assets', function() {
 
 // Requires gulp >=v3.5.0
 gulp.task('watch', function () {
-    gulp.watch('app/src/**', ['scripts']);
+    gulp.watch('app/src/**', ['scripts', 'step1']);
     gulp.watch('app/css/**', ['styles']);
     gulp.watch('app/**/*.html', ['html']);
     gulp.watch('app/assets/**', ['assets']);
 });
 
-gulp.task('build', ['scripts', 'styles', 'html', 'assets']);
-gulp.task('default', ['scripts', 'styles', 'html', 'assets', 'serve', 'watch']);
+gulp.task('build', ['scripts', 'step1', 'styles', 'html', 'assets']);
+gulp.task('default', ['scripts', 'step1', 'styles', 'html', 'assets', 'serve', 'watch']);

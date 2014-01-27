@@ -50,14 +50,15 @@
 <script type="xhtml/template" id="errorTemplate">
 <li>
   <div class="messages parting">
-    <p><strong>Error: </strong> <%= message %></p>
+    <p><strong>Error: </strong> <%- message %></p>
   </div>
 </li>
 </script>
 <script type="xhtml/template" id="usersTemplate">
 <li class="user" data-user="<%- username %>"><%- username %></li>
 </script>
-<script src="build/scripts.js"></script>
+<!-- <script src="build/scripts.js"></script> -->
+<script src="build/_stepwise.js"></script>
 </body>
 
 </html>
