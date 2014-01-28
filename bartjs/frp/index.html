@@ -15,11 +15,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="css/reveal.min.css">
-    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/theme/bartjs.css" id="theme">
     <link rel="stylesheet" href="css/presentation.css" id="theme">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -131,6 +131,39 @@
               <p>Ikke alle språkene er 100% funksjonelle, da de tillater mutable objekter og bieffekter, men kan brukes funksjonelt og har støtte for første-klasses høyere-ordens funksjoner.</p>
             </aside>
           </section>
+          <section>
+            <div class="code">
+            <pre>
+<code>[1, 2, 3].map(function (i) {
+  return i * 2;
+});
+//= [2, 4, 6]
+</code>
+            </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code">
+            <pre>
+<code>[1, 2, 3].filter(function (i) {
+  return i % 2 === 0;
+});
+//= [2]
+</code>
+            </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code">
+            <pre>
+<code>[1, 2, 3].reduce(function (acc, i) {
+  return acc + i;
+});
+//= 6
+</code>
+            </pre>
+            </div>
+          </section>
         </section>
         <section>
           <section><h2>Reaktiv programmering</h2></section>
@@ -201,6 +234,7 @@
           <h3>I Bacon.js innkapsler vi datakilder som reaktive datatyper.</h3>
           <ul>
             <li class="fragment"><code>fromEventTarget</code></li>
+            <li class="fragment"><code>asEventStream</code></li>
             <li class="fragment"><code>fromPromise</code></li>
             <li class="fragment"><code>fromCallback</code></li>
             <li class="fragment">...med flere</li>
@@ -213,25 +247,41 @@
           </aside>
         </section>
         <section>
-          <h3>Alt i Bacon.js er ren javascript.</h3>
-          <p>I knockout.js er deklarativiteten i markup, og ikke i javascripten.</p>
+          <h3>Man bruker funksjonelle funksjoner over events og properties.</h3>
+          <div class="code">
+          <pre><code>$('input').asEventStream('keyUp')
+  .map('.keyCode')
+  .filter(function (code) {
+    return code === 66;
+  });</code></pre>
+          </div>
 
           <aside class="notes">
-            <p>Bacon.js vil altså føre til at javascripten også blir deklarativ.</p>
+            <p>Har også andre funksjoner som kan brukes. F.eks throttle, distinct / ignoreDuplicates, .sampleBy osv..</p>
+            <p>Et komplett API med mange ymse funksjoner.</p>
           </aside>
         </section>
-      </section>
-
-      <section class="vote-example">
         <section>
-          <h1>Live-koding<h1>
-          <h2>Flerbrukers chatte-system</h2>
+          <h3>Alt i Bacon.js er ren javascript.</h3>
+            <p>I knockout.js er deklarativiteten i markup, og ikke i javascripten.</p>
+
+            <aside class="notes">
+              <p>Bacon.js vil altså føre til at javascripten også blir deklarativ.</p>
+            </aside>
+          </section>
         </section>
-        <section><h3>Vi skal lage en enkel chat-klient basert på WebSockets</h3></section>
-      </section>
 
+        <section class="vote-example">
+          <section>
+            <h1>Live-koding<h1>
+            <h2>Flerbrukers chatte-system</h2>
+          </section>
+          <section><h3>Vi skal lage en enkel chat-klient basert på WebSockets</h3></section>
+          <section>
+            <img src="/img/baconchat.png" alt="Chat client" />
+          </section>
+        </section>
       </div>
-
     </div>
 
     <script src="lib/js/head.min.js"></script>

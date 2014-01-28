@@ -45,7 +45,8 @@ body:before {
   z-index: 9999;
 }
 
-.reveal code {
+.reveal > code,
+.reveal p code {
   color: #000000;
   background: #fdf6e3;
   border-radius: 2px;
