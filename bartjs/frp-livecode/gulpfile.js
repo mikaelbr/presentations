@@ -9,7 +9,6 @@ var refresh = require('gulp-livereload');
 var lr = require('tiny-lr');
 var lrserver = lr();
 var minifyCSS = require('gulp-minify-css');
-var embedlr = require('gulp-embedlr');
 var ecstatic = require('ecstatic');
 var imagemin = require('gulp-imagemin');
 var nodemon = require('nodemon');
@@ -17,7 +16,6 @@ var nodemon = require('nodemon');
 var livereloadport = 35729;
 
 gulp.task('scripts', function() {
-  console.log("SCRIPTS:");
     return gulp.src(['app/src/app.js'])
         .pipe(browserify())
         .on('error', notify.onError())
@@ -67,7 +65,6 @@ gulp.task('serve', function() {
 
 gulp.task('html', function() {
     return gulp.src("app/*.html")
-        .pipe(gif(gulp.env === "dev", embedlr()))
         .pipe(gulp.dest('dist/'))
         .pipe(refresh(lrserver));
 })

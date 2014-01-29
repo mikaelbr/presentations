@@ -31,10 +31,12 @@ inherits(Chat, EventEmitter);
 
 Chat.prototype.join = function (username) {
   if (!this.connected) {
-    return this.emit('error', new Error('Not connected yet.'));
+    this.emit('error', new Error('Not connected yet.'));
+    return this;
   }
   if (this.username) {
-    return this.emit('error', new Error('Already connected and logged in as ' + this.username));
+    this.emit('error', new Error('Already connected and logged in as ' + this.username));
+    return this;
   }
 
   this.username = username;
@@ -45,10 +47,12 @@ Chat.prototype.join = function (username) {
 
 Chat.prototype.message = function (message) {
   if (!this.connected || !this.username) {
-    return this.emit('error', new Error('Not connected yet. Join by using /join <username>'));
+    this.emit('error', new Error('Not connected yet. Join by using /join <username>'));
+    return this;
   }
   if (!message) {
-    return this.emit('error', new Error('No message given.'));
+    this.emit('error', new Error('No message given.'));
+    return this;
   }
   var data = {
     username: this.username,

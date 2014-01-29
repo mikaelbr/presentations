@@ -39,14 +39,14 @@ var newMessages = message
   .merge(errorHtml)
   // Nå har vi en event stream av både meldinger og feilmeldinger.
   // "reduce", akkumuler alt
-  .scan('', h.sum)
-  // sett akkumulerte som html på discussion
-  .assign($('.discussion'), 'html');
+  .scan('', h.sum);
 
+// sett akkumulerte som html på discussion
+newMessages.assign($('.discussion'), 'html');
 
 
 // **********
-// Vi påloggede brukere
+// Vis påloggede brukere
 // **********
 
 
@@ -127,7 +127,7 @@ var sentMessage = bacon
   .fromEventTarget($('#input-message'), 'keyup')
   .toProperty()
   // henter ur value fra event.
-  .map(h.toValue)
+  .map('.target.value')
   // ny event stream, triggres hver gang enter blir kjørt
   .sampledBy(enter);
 
