@@ -16,7 +16,6 @@ var $ = require('jquery-browserify'),
 // Gjør chat tilgjengelig til testing.
 window.chat = chat;
 
-
 // **********
 // Skriv ut alle meldinger
 // **********

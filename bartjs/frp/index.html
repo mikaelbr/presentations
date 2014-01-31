@@ -234,7 +234,6 @@
           <h3>I Bacon.js innkapsler vi datakilder som reaktive datatyper.</h3>
           <ul>
             <li class="fragment"><code>fromEventTarget</code></li>
-            <li class="fragment"><code>asEventStream</code></li>
             <li class="fragment"><code>fromPromise</code></li>
             <li class="fragment"><code>fromCallback</code></li>
             <li class="fragment">...med flere</li>
@@ -249,7 +248,7 @@
         <section>
           <h3>Man bruker funksjonelle funksjoner over events og properties.</h3>
           <div class="code">
-          <pre><code>$('input').asEventStream('keyUp')
+          <pre><code>Bacon.fromEventTarget($('input'), 'keyUp')
   .map('.keyCode')
   .filter(function (code) {
     return code === 66;
