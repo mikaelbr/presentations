@@ -214,7 +214,71 @@
             </script>
           </section>
       </section>
+      <section>
+        <section>
+            <h2>Funksjonell Reaktiv Programmering</h2>
+            <aside class="notes">
+                <p>Så. Da har vi funksjonell programmering og vi har reaktiv programmering. Nå skal vi se på hvordan dette blir når vi slår det sammen.</p>
+            </aside>
+        </section>
+        <section>
+            <h3>To generelle konsepter</h3>
+            <ol>
+                <li>Behaviours (Adferd)</li>
+                <li>Events (Hendelse)</li>
+            </ol>
+            <aside class="notes">
+                <p>Adferder og hendelser er to forskjellige kilder av informasjon som vi skal se på litt nærmere.</p>
+            </aside>
+        </section>
+        <section>
+            <h3>Adferder</h3>
+            <p>En kontinuerlig verdi. Eksemeplvis klokken, høyde eller vektorgrafikk.</p>
 
+            <aside class="notes">
+                <p>En adferd vil alltid ha en verdi. Det er noe som er kontinuerlig, og som er målbart.</p>
+                <p>Selv om en adferd har en kontinuerlig verdi kan den måles/observeres til å ha en spesifikk verdi.</p>
+                <p>F.eks selv om klokken aldri ikke er satt (altså er kontinuerlig), kan jeg måle den på nåværende tidspunkt.</p>
+            </aside>
+        </section>
+        <section>
+            <h3>Hendelser</h3>
+            <p>En diskret verdi. Eksempelvis muse-klikk eller en mengde.</p>
+
+            <aside class="notes">
+                <p>Diskrete verdier eksisterer kun når de inntreffer, og i mellomtiden er det ikke eksisterende.</p>
+                <p>F.eks om en gjør et museklikk vil den ha en verdi (binært 1, i dette tilfellet) i det musen blir klikket, men i det den er ferdig-trykket, vil verdien slutte å eksistere.</p>
+            </aside>
+        </section>
+        <section>
+            <h4>I FRP blir adferder og hendelser behandlet som sekvenser og kan bli håndtert på en funksjonell måte.</h4>
+
+            <aside class="notes">
+                <p>F.eks med bruken av "map", "reduce" eller "filter".</p>
+                <p>Om man bruker "map" på en hendelse, vil et funksjonskall bli kalt på verdien hver gang hendelsen inntreffer. Utfallet etter map vil være en ny hendelse der verdien er transformert.</p>
+                <p>Om en f.eks bruker "filter", vil en få ut en hendelsessekvens som kun inneholder hendelser som oppfyller predikatet som er sendt inn i filter-kallet.</p>
+                <p>Med "reduce" vil det som bli returnert være en adferd, ettersom den da alltid vil ha verdier.</p>
+            </aside>
+        </section>
+
+        <section>
+            <h4>Gevinst av FRP</h4>
+            <ul>
+              <li class="fragment">Reaktive datatyper for representasjon av tilstand.</li>
+              <li class="fragment">Sammensettbar data / komposisjoner</li>
+              <li class="fragment">GUI uten bi-effekter.</li>
+            </ul>
+            <aside class="notes">
+              <p>Siden GUIer er naturlig tilstandsfulle trenger vi noe som kan representere den tilstanden og tillate oss å endre den. Reaktiv programmering gir oss datatyper for å representere tilstanden elementene i GUIet vårt. Til forskjell fra det velkjente MVC-konseptet så dreier representasjon i FRP seg mer om å dele ting opp i enkeltelementer kontra sammensatte kompoenenter.</p>
+
+              <p>Den asynkrone naturen til et brukergrensesnitt er også spesielt utfordrende å forholde seg til hvis man samtidig skal sjonglere tilstand. Fordelen med reaktive datatyper i GUI design er at vi får automatisk propagering av tilstandsendringer og ikke behøver å håndtere dette selv.</p>
+
+              <p>For å lage sammensatt data i FRP kan vi kombinere de reaktive datatypene slik at de danner mer komplekse strukturer. Den store fordelen her er at du til en hver tid er garantert av den reaktive egenskapen at endringer i tilstand propagerer gjennom hele den sammensatte strukturen.</p>
+
+              <p>FRP abstraherer bort bruken av bieffekter i GUI-et så vi ikke trenger å forholde oss til tilstander.</p>
+            </aside>
+        </section>
+    </section>
       <section>
         <section>
           <h1>Praktisk FRP</h1>
@@ -262,8 +326,6 @@
         </section>
         <section>
           <h3>Alt i Bacon.js er ren javascript.</h3>
-            <p>I knockout.js er deklarativiteten i markup, og ikke i javascripten.</p>
-
             <aside class="notes">
               <p>Bacon.js vil altså føre til at javascripten også blir deklarativ.</p>
             </aside>
@@ -277,7 +339,7 @@
           </section>
           <section><h3>Vi skal lage en enkel chat-klient basert på WebSockets</h3></section>
           <section>
-            <img src="/img/baconchat.png" alt="Chat client" />
+            <img src="img/baconchat.png" alt="Chat client" />
           </section>
         </section>
       </div>
