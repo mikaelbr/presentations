@@ -1,5 +1,6 @@
 var http = require('http');
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var notify = require('gulp-notify');
@@ -16,27 +17,29 @@ var nodemon = require('nodemon');
 var livereloadport = 35729;
 
 gulp.task('scripts', function() {
-    return gulp.src(['app/src/app.js'])
+    console.log('hjfdshjdf')
+    return gulp.src('app/src/app.js')
         .pipe(browserify())
-        .on('error', notify.onError())
+        .on('error', gutil.log)
         .pipe(concat('scripts.js'))
-        .on('error', notify.onError())
+        .on('error', gutil.log)
         .pipe(gulp.dest('dist/build'))
         .pipe(refresh(lrserver));
 });
 
 gulp.task('step1', function() {
-    return gulp.src(['app/src/_stepwise.js'])
+    return gulp.src('app/src/_stepwise.js')
         .pipe(browserify())
         .on('error', notify.onError())
         .pipe(concat('_stepwise.js'))
         .on('error', notify.onError())
         .pipe(gulp.dest('dist/build'))
+        .on('error', notify.onError())
         .pipe(refresh(lrserver));
 });
 
 gulp.task('styles', function() {
-    return gulp.src(['app/css/style.less'])
+    return gulp.src('app/css/style.less')
         .pipe(less())
         .on('error', notify.onError())
         .pipe(minifyCSS())
@@ -77,13 +80,14 @@ gulp.task('assets', function() {
         .pipe(refresh(lrserver));
 });
 
+
 // Requires gulp >=v3.5.0
 gulp.task('watch', function () {
-    gulp.watch('app/src/**', ['scripts', 'step1']);
+    gulp.watch(['app/src/**', '!app/src/fake_**'], ['scripts']);
     gulp.watch('app/css/**', ['styles']);
     gulp.watch('app/**/*.html', ['html']);
     gulp.watch('app/assets/**', ['assets']);
 });
 
-gulp.task('build', ['scripts', 'step1', 'styles', 'html', 'assets']);
-gulp.task('default', ['scripts', 'step1', 'styles', 'html', 'assets', 'serve', 'watch']);
+gulp.task('build', ['scripts', 'styles', 'html', 'assets']);
+gulp.task('default', ['scripts', 'styles', 'html', 'assets', 'serve', 'watch']);

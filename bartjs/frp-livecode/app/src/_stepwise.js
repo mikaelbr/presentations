@@ -35,13 +35,10 @@ var newMessages = message
   // gjør om til HTML
   .map(h.template.message)
   // Merge inn stasj her...
-  .merge(errorHtml)
-  // Nå har vi en event stream av både meldinger og feilmeldinger.
-  // "reduce", akkumuler alt
-  .scan('', h.sum);
+  .merge(errorHtml);
 
 // sett akkumulerte som html på discussion
-newMessages.assign($('.discussion'), 'html');
+newMessages.assign($('.discussion'), 'append');
 
 
 // **********
