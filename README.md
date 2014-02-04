@@ -3,6 +3,6 @@
 ## In Norwegian
 
 ### Presentation on Functional Reactive Programming for @bartjs
-[Slides](bartjs/frp) - [Code](bartjs/frp-livecode)
+[Slides](bartjs/frp) - [Code](bartjs/frp-livecode) - [Hosted slides](http://git.mikaelb.net/presentations/bartjs/frp/)
 
 
