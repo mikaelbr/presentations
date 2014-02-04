@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "postinstall": "./node_modules/gulp/bin/gulp.js build --production",
-    "dev": "./node_modules/gulp/bin/gulp.js --dev"
+    "dev": "./node_modules/gulp/bin/gulp.js --developer"
   },
   "author": "Mikael Brevik",
   "license": "MIT",

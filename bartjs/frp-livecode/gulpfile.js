@@ -5,7 +5,6 @@ var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var notify = require('gulp-notify');
 var less = require('gulp-less');
-var gif = require('gulp-if');
 var refresh = require('gulp-livereload');
 var lr = require('tiny-lr');
 var lrserver = lr();
@@ -47,7 +46,7 @@ gulp.task('styles', function() {
         .pipe(refresh(lrserver));
 });
 
-gulp.task('serve', function() {
+gulp.task('serve', ['scripts', 'styles', 'html', 'assets'], function() {
   //Set up your livereload server
   nodemon({
     script: 'server.js',
@@ -90,4 +89,4 @@ gulp.task('watch', function () {
 });
 
 gulp.task('build', ['scripts', 'styles', 'html', 'assets']);
-gulp.task('default', ['scripts', 'styles', 'html', 'assets', 'serve', 'watch']);
+gulp.task('default', ['serve', 'watch']);
