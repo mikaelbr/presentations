@@ -1,8 +1,10 @@
+//=> File: 3.js
+
 var fs = require('fs');
 var through = require('through2');
 var split = require('split');
 
-fs.createReadStream('data/compiled.data')
+fs.createReadStream('../data/compiled.data')
   .pipe(split(JSON.parse)) // split on \n and convert to obj
   .pipe(through.obj(function (obj, enc, next) {
     obj.text && this.push(new Buffer(obj.text.replace(/\n/g, " ")) + "\n");
@@ -15,6 +17,10 @@ fs.createReadStream('data/compiled.data')
     next();
   }))
   .pipe(process.stdout)
-  .on('error', function() {
-    process.exit(1);
-  });
+  // .on('error', function() {
+  //   process.exit(1);
+  // });
+
+// Example usage:
+// node filtering.js | head -n5
+// node filtering.js | grep Trønder

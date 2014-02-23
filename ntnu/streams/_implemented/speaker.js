@@ -1,3 +1,5 @@
+//=> File: 4.js
+
 var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
@@ -10,6 +12,6 @@ var options = {
 
 var decoder = new lame.Decoder(options);
 var speaker = new Speaker(options);
-var song = fs.createReadStream('data/sample.mp3');
+var song = fs.createReadStream('../data/sample.mp3');
 
 song.pipe(decoder).pipe(speaker);
