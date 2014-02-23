@@ -143,16 +143,6 @@ s1.pipe(s2).pipe(s1);
 
             <p>Med pull streams kan en håntere dersom f.eks mottaker skriver data tregere enn sender.</p>
           </section>
-
-          <section>
-            <h3>Pull streams (introdusert i Node.js 0.10)</h3>
-            <p>Puller data fra writable (bruker <code>read(n)</code> der <code>n</code> er buffer størrelse).</p>
-            <p>Med å pulle data, har en mulighet til å stoppe flyt av data, f.eks om en writable er tregere enn kilde-stream.</p>
-          </section>
-
-          <section>
-            <h3>En burde unngå å bruke push streams der det lar seg gjøre.</h3>
-          </section>
         </section>
 
         <section>
