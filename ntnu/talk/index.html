@@ -100,7 +100,6 @@
               <li>Writable</li>
               <li>Through (Transform)</li>
               <li>Duplex</li>
-              <li>Classic</li>
             </ul>
           </section>
 
@@ -134,32 +133,25 @@ s1.pipe(s2).pipe(s1);
           </section>
 
           <section>
-            <h3>Classic streams</h3>
-            <p>
-              Er gamle streams, som egentlig kun er
-              en EventEmitter som emitter på <code>data</code> og <code>end</code>
-            </p>
-            <p>Streams blir satt i compability mode (gjort om til classic stream) om de har en lytter på <code>data</code></p>
+            <h2>Gamle streams vs nye streams</h2>
+            <p>Før Node.js 0.10, ble det brukt push streams, nå blir pull streams brukt (også kalt streams2)</p>
+            <p>Streams blir satt i compability mode (gjort om til push stream) om de har en event lytter på <code>data</code>.</p>
           </section>
 
           <section>
-            <h2>Classic Streams vs Streams2</h2>
+            <h3>Push streams</h3>
+            <p>Push streams er "dumme" og har ingen fast måte å sette pause på.</p>
+            <p>Pusher data inn til mottaker (via events).</p>
           </section>
 
           <section>
-            <h3>Classic streams</h3>
-            <p>Classic streams er "dumme" og har ingen fast måte å sette pause på.</p>
-            <p>Classic Pusher data inn til mottaker (via events).</p>
-          </section>
-
-          <section>
-            <h3>Streams2 (Node.js >= 0.10)</h3>
+            <h3>Pull streams (Streams2, Node.js >= 0.10)</h3>
             <p>Puller data fra writable (bruker <code>read(n)</code> der <code>n</code> er buffer størrelse).</p>
             <p>Med å pulle data, har en mulighet til å stoppe flyt av data, f.eks om en writable er tregere enn kilde-stream.</p>
           </section>
 
           <section>
-            <h3>En burde unngå å bruke streams1 der det lar seg gjøre.</h3>
+            <h3>En burde unngå å bruke gamle streams der det lar seg gjøre.</h3>
           </section>
         </section>
 
@@ -230,6 +222,10 @@ song.pipe(decoder).pipe(speaker);
             </code></pre>
           </section>
 
+        </section>
+
+        <section>
+          <h3>Kjapp oppsummering
         </section>
 
       </div>
