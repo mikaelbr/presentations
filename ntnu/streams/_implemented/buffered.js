@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //=> File: 1.js
 
 // Do "ls -lsh data/ | grep data"

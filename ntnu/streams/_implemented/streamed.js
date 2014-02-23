@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //=> File: 2.js
 
 var fs = require('fs');
