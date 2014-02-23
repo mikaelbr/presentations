@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Introduksjon til Funksjonell Reaktiv Programmering</title>
+    <title>Instant data med Javscript Streams</title>
 
-    <meta name="description" content="Foredrag om bruk av Bacon.js og Funksjonell Reaktiv Programmering">
+    <meta name="description" content="Foredrag om bruk av streams i javascript">
     <meta name="author" content="Mikael Brevik">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,17 +53,183 @@
           </div>
           <div class="avatar">
             <img src="img/mikaelbrevik.jpeg" alt="Mikael Brevik" />
-            <!-- <img src="https://intern.bekk.no/Employees/ViewEmployeeImage.ashx?thumbnail=true&amp;thumbsize=235&amp;employee=630"> -->
           </div>
         </section>
 
         <section>
             <h2>Agenda</h2>
             <ol>
-                <li class="fragment">Teoretisk perspektiv</li>
-                <li class="fragment">Bacon.js</li>
-                <li class="fragment">Livekoding og magi</li>
+              <li class="fragment">Hva er Javascript Streams?</li>
+              <li class="fragment">Kode!</li>
             </ol>
+        </section>
+
+        <section>
+          <section>
+            <h1>Streams</h1>
+          </section>
+
+          <section>
+            <p>Stammer fra UNIX versjon 8</p>
+            <p>Gjør blant annet at man kan gjøre I/O operasjoner chunk for chunk og ikke buffre hele innholdet i minnet.</p>
+          </section>
+
+          <section>
+            <h3>Antall tegn i de første 9 linjene av index.html</h3>
+            <pre><code data-trim class="bash">
+            ➜ cat index.html | head -n9 | wc -c
+    => 248</code></pre>
+
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>I Javascript</h1>
+          </section>
+
+          <section>
+            <p>Node.js har en innebygd modul kalt <code>streams</code>.</p>
+            <p>Fremfor å bruke <code>|</code> bruker man <code>.pipe()</code></p>
+          </section>
+
+          <section>
+            <h3>5 forskjellige streams</h3>
+            <ul>
+              <li>Readable</li>
+              <li>Writable</li>
+              <li>Through (Transform)</li>
+              <li>Duplex</li>
+              <li>Classic</li>
+            </ul>
+          </section>
+
+          <section>
+            <pre class="fragment"><code>// Echo application</code></pre>
+            <pre><code data-trim class="javascript">
+var readable = process.stdin;
+var writable = process.stdout;
+readable.pipe(writable);
+            </code></pre>
+          </section>
+
+          <section>
+            <pre><code data-trim class="javascript">
+// Some implementation
+var SHOUT = new stream.Transform;
+process.stdin
+        .pipe(SHOUT)
+        .pipe(process.stdout);
+            </code></pre>
+          </section>
+
+          <section>
+            <pre><code data-trim class="javascript">
+var s1 = throughStream();
+var s2 = throughStream();
+s1.pipe(s2).pipe(s1);
+            </code></pre>
+
+            <p>To-veis kommunikasjon. Kan snakke begge veier.</p>
+          </section>
+
+          <section>
+            <h3>Classic streams</h3>
+            <p>
+              Er gamle streams, som egentlig kun er
+              en EventEmitter som emitter på <code>data</code> og <code>end</code>
+            </p>
+            <p>Streams blir satt i compability mode (gjort om til classic stream) om de har en lytter på <code>data</code></p>
+          </section>
+
+          <section>
+            <h2>Classic Streams vs Streams2</h2>
+          </section>
+
+          <section>
+            <h3>Classic streams</h3>
+            <p>Classic streams er "dumme" og har ingen fast måte å sette pause på.</p>
+            <p>Classic Pusher data inn til mottaker (via events).</p>
+          </section>
+
+          <section>
+            <h3>Streams2 (Node.js >= 0.10)</h3>
+            <p>Puller data fra writable (bruker <code>read(n)</code> der <code>n</code> er buffer størrelse).</p>
+            <p>Med å pulle data, har en mulighet til å stoppe flyt av data, f.eks om en writable er tregere enn kilde-stream.</p>
+          </section>
+
+          <section>
+            <h3>En burde unngå å bruke streams1 der det lar seg gjøre.</h3>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Livekode!</h1>
+          </section>
+
+          <section>
+            <h3>Buffer av alt innhold</h3>
+            <pre><code data-trim class="javascript">
+// Uten stream. Buffer alt til minnet.
+// Krasjer om stor fil.
+var data = fs.readFileSync(
+    'data/compiled.data'
+  );
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>The stream way</h3>
+            <pre><code data-trim class="javascript">
+// Med stream. Start uthenting
+// chunk for chunk med en gang
+var readStream =
+    fs.createReadStream('compiled.data');
+readStream.pipe(process.stdout);
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Mer avansert bruk</h3>
+            <pre><code data-trim class="javascript">
+fs.createReadStream('data/compiled.data')
+  .pipe(split(JSON.parse)) // split på \n, gjør om til obj.
+  .pipe(through.obj(function (obj, enc, next) {
+    obj.text && this.push(new Buffer(obj.text.replace(/\n/g, " ")) + "\n");
+    next();
+  }))
+
+// ... neste slide
+            </code></pre>
+          </section>
+
+          <section>
+            <pre><code data-trim class="javascript">
+// ... fra forrige slide
+.pipe(through.obj(function (tweet, enc, next) {
+  if (tweet && /Sochi/ig.test(tweet) && !/^RT/.test(tweet)) {
+    this.push(tweet);
+  }
+  next();
+}))
+.pipe(process.stdout)
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Magi?</h3>
+            <pre><code data-trim class="javascript">
+var decoder = new lame.Decoder(options);
+var speaker = new Speaker(options);
+var song =
+  fs.createReadStream('data/sample.mp3');
+
+song.pipe(decoder).pipe(speaker);
+// => music
+            </code></pre>
+          </section>
+
         </section>
 
       </div>

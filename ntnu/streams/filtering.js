@@ -3,7 +3,7 @@ var through = require('through2');
 var split = require('split');
 
 fs.createReadStream('data/compiled.data')
-  .pipe(split(JSON.parse)) // split on new line
+  .pipe(split(JSON.parse)) // split on \n and convert to obj
   .pipe(through.obj(function (obj, enc, next) {
     obj.text && this.push(new Buffer(obj.text.replace(/\n/g, " ")) + "\n");
     next();

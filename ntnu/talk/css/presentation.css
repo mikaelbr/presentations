@@ -109,3 +109,8 @@
   border: 0;
   background: inherit;
 }
+
+.reveal pre code {
+  font-size: 2em;
+  line-height: 1.4em;
+}
