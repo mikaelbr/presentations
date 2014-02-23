@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Introduksjon til Funksjonell Reaktiv Programmering</title>
+
+    <meta name="description" content="Foredrag om bruk av Bacon.js og Funksjonell Reaktiv Programmering">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="lib/js/jquery.js"></script>
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <h2>Instant data med Javascript Streams</h2>
+        </section>
+
+        <section class="about-me">
+          <div class="about-description">
+            <h2>Mikael Brevik</h2>
+            <ul>
+              <li>Konsulent hos BEKK</li>
+              <li>Bachelor fra HIST (2011), Master fra NTNU (2013).</li>
+            </ul>
+            <p>Tidvis open source utvikler og standhaftig surfer på internett. Er å finne på Github som <a href="https://github.com/mikaelbr">@mikaelbr</a> og Twitter <a href="http://twitter.com/mikaelbrevik">@mikaelbrevik</a>. Regelmessig googler og Stackoverflow-leser.</p>
+          </div>
+          <div class="avatar">
+            <img src="img/mikaelbrevik.jpeg" alt="Mikael Brevik" />
+            <!-- <img src="https://intern.bekk.no/Employees/ViewEmployeeImage.ashx?thumbnail=true&amp;thumbsize=235&amp;employee=630"> -->
+          </div>
+        </section>
+
+        <section>
+            <h2>Agenda</h2>
+            <ol>
+                <li class="fragment">Teoretisk perspektiv</li>
+                <li class="fragment">Bacon.js</li>
+                <li class="fragment">Livekoding og magi</li>
+            </ol>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 1100px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>

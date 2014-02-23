@@ -1,0 +1,18 @@
+{
+  "name": "streams-presentation",
+  "version": "0.0.0",
+  "description": "A presentation about streams held at NTNU TechTalks",
+  "main": "buffered.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mikael Brevik <mikaelbre@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "oauth": "~0.9.11",
+    "split": "~0.3.0",
+    "through2": "~0.4.1",
+    "speaker": "0.0.10",
+    "lame": "~1.0.3"
+  }
+}

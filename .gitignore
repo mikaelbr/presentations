@@ -3,3 +3,4 @@ npm-debug.log
 
 **/node_modules/
 bartjs/frp-livecode/dist/
+ntnu/**/data/*.data
