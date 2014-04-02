@@ -7,8 +7,16 @@ elms.forEach(createCM);
 var errorElement = document.querySelector('pre.error');
 var outputElement = document.querySelector('pre.output');
 
+function clearOutput () {
+  outputElement.textContent = "";
+  outputElement.hidden = true;
+
+  errorElement.textContent = "";
+  errorElement.hidden = true;
+}
+
 function createCM(el) {
-  CodeMirror.fromTextArea(el, {
+  var em = CodeMirror.fromTextArea(el, {
     lineNumbers: true,
       //defining some keyboard shortcuts
     extraKeys: {
@@ -22,26 +30,40 @@ function createCM(el) {
         compile(cm.getValue());
       },
       "Ctrl-U": function(cm) {
-        outputElement.innerHTML = "";
+        clearOutput();
       }
     }
   });
+
+  Reveal.addEventListener( 'slidechanged', function () {
+    em.refresh();
+  });
 };
 
-Reveal.addEventListener( 'slidechanged', function( event ) {
-  outputElement.innerHTML = "";
-});
+
+
+Reveal.addEventListener( 'slidechanged', clearOutput);
+
+var printableFalsy = function (arr) {
+  return arr.map(function (str) {
+    if (str === void 0) {
+      return "undefined";
+    }
+    if (str === null) {
+      return "null";
+    }
+    return str;
+  });
+};
 
 var setValueLineUnder = function (...rest) {
-  var value = null;
-  if (rest.length !== 1) {
-    value = rest.join(" ");
-  }
+  var value = printableFalsy(rest).join(" ");
   var print = value.split("\n").map(function (txt) {
     return "// => " + txt;
   }).join("\n");
 
-  outputElement.innerHTML +=  print + "\n";
+  outputElement.textContent +=  print + "\n";
+  outputElement.hidden = false;
 };
 
 window.log = setValueLineUnder;
@@ -50,13 +72,16 @@ function compile(contents) {
   if (!outputElement) {
     return;
   }
-  outputElement.innerHTML = "";
+  clearOutput();
 
-  errorElement.hidden = true;
   function onSuccess(mod) { }
   function onFailure(errors) {
      errorElement.hidden = false;
-     errorElement.textContent = errors.join('\n');
+     var filtered = errors.map(function (err) {
+      return err.split(/\d:\d+\:\s+/)[1];
+     })
+
+     errorElement.textContent = filtered.join('\n');
   }
 
   function onTranscoded(metadata, url) {  }
