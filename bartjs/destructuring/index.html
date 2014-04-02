@@ -200,6 +200,12 @@ log(x);
 // More values
 var {prop: x, prop2: y} = {prop: 5, prop2: 10};
 log(x, y);
+
+
+// No need to take all
+var {prop: x} = {prop: "Foobar", prop2: 10};
+log(x);
+
 </textarea>
 <small>Ctrl + S to run selected</small>
 </div>
@@ -229,7 +235,12 @@ var a, b;
 ({ a, b } = {a: 1, b: 2});
 log(a, b);
 
-// This due to the grammar in JS. () converts to an expression.
+// From Harmony Wiki:
+// Note that object literals cannot appear in
+// statement positions, so a plain object
+// destructuring assignment statement
+//  { x } = y must be parenthesized either
+// as ({ x } = y) or ({ x }) = y.
 
 
 
