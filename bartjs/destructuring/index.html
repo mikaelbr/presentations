@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Introduksjon til Funksjonell Reaktiv Programmering</title>
+
+    <meta name="description" content="Foredrag om bruk av Bacon.js og Funksjonell Reaktiv Programmering">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bartjs.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
+    <link rel="stylesheet" href="plugin/repl/codemirror-3.22/lib/codemirror.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <script src="plugin/repl/codemirror-3.22/lib/codemirror.js"></script>
+    <script src="plugin/repl/codemirror-3.22/mode/javascript/javascript.js"></script>
+    <script src="plugin/repl/traceur.js"></script>
+
+    <style>
+
+    .CodeMirror {
+      height: 500px;
+      text-align: left;
+    }
+
+    textarea {
+      height: 300;
+    }
+
+    .CodeMirror pre {
+
+    }
+
+    .error {
+      color: red;
+    }
+
+    .error {
+      margin: 10px;
+      flex: 1;
+    }
+
+    .output {
+      color: #fff;
+    }
+
+    .box-output {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+
+      font-size: 40px;
+    }
+
+    .code-repl-block {
+      height: 500px;
+    }
+
+    .CodeMirror-linenumber {
+      padding: 0 10px !important;
+    }
+
+    </style>
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+
+        <section>
+          <img src="img/moustache.svg" alt="Bart" class="no-style" />
+          <h2>ECMAScript 6: Destructuring</h2>
+          <p>
+            Av <a href="http://twitter.com/mikaelbrevik">@mikaelbrevik</a> for Meetup #3 <a href="http://bartjs.github.io">Bart.JS</a> 3. april.
+          </p>
+        </section>
+
+        <section>
+          <h3>Normal arrays</h3>
+<div class="code-repl-block">
+<textarea class="repl-input" hidden>
+// Most basic usage
+var [a, b] = [1, 2];
+log(a, b);
+
+// Use from functions, only select from pattern
+var foo = () => {
+  return [2, 4, 6];
+};
+
+var [a, b] = foo();
+log(a, b);
+</textarea>
+<small>Ctrl + S to run selected</small>
+</div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class='box-output'>
+      <pre class="error"></pre>
+      <pre class="output"></pre>
+    </div>
+
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 1100px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+    <script>
+    System.import('./plugin/repl/repl');
+    </script>
+
+  </body>
+</html>
