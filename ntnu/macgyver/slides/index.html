@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Instant data med Javscript Streams</title>
+
+    <meta name="description" content="Foredrag om bruk av streams i javascript">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <h2>Bli en MacGyver med Node.js</h2>
+        </section>
+
+        <section data-background="./img/explosion.gif"></section>
+
+        <section class="about-me">
+          <div class="about-description">
+            <h2>Mikael Brevik</h2>
+            <ul>
+              <li>Konsulent hos BEKK</li>
+              <li>Bachelor fra HIST (2011), Master fra NTNU (2013).</li>
+            </ul>
+            <p>Tidvis open source utvikler og standhaftig surfer på internett. Er å finne på Github som <a href="https://github.com/mikaelbr">@mikaelbr</a> og Twitter <a href="http://twitter.com/mikaelbrevik">@mikaelbrevik</a>. Regelmessig googler og Stackoverflow-leser.</p>
+          </div>
+          <div class="avatar">
+            <img src="img/mikaelbrevik.jpeg" alt="Mikael Brevik" />
+          </div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h3>Hva skal vi se på i dag?</h3>
+          <ul>
+            <li class="fragment">Kjapt om Node.js</li>
+            <li class="fragment">Økosystemet til Node.js</li>
+            <li class="fragment">Node.js som tooling</li>
+            <li class="fragment">Kodeeksempler</li>
+          </ul>
+        </section>
+
+        <section data-background="#a3354c">
+          <h2>Node.js</h2>
+          <p>Googles V8 Javascript-engine med et ekstra API som tillater oss å bruke Javascript som et serversidespråk.</p>
+        </section>
+
+        <section data-background="#a3354c">
+          <h3>Ettersom det er Javascript kan man bruke erfaringer fra nettleseren.</h3>
+          <p>I enkelte tilfeller kan man også dele kode mellom tjener og klient.</p>
+        </section data-background="#a3354c">
+
+        <section data-background="#a3354c">
+          <p>Som med Javascript for vi et ikke-blokkerende (asynkront) miljø, uten trådhåndtering.</p>
+          <p>Kjappheten til V8 og den asynkrone modellen gjør at Node.js egner seg godt til input og output operasjoner.</p>
+        </section>
+
+        <section data-background="#a3354c">
+          <p>Det som gjør det kjapt for I/O, gjør det ikke så godt egnet til tunge CPU operasjoner</p>
+          <p>Disse vil da blokkere kjøringen, og det gjør at vi mister fordelen med asynkronitet.</p>
+        </section>
+
+        <section  data-background="#a3354c">
+<pre><code data-trim class="javascript">
+// get standard libraries
+var fs = require('fs');
+var http = require('http');
+
+// create HTTP server on port 3000
+http.createServer(function (req, res){
+  fs.createReadStream('file.dat').pipe(res);
+}).listen(3000);
+</code></pre>
+        </section>
+
+        <section data-background="#297f79">
+          <h1>Massivt økosystem av kode</h1>
+        </section>
+
+        <section data-background="#297f79">
+          <p>Har et utrolig voksende community hvor fokuset er stort på modulæritet og kode-deling.</p>
+        </section>
+
+        <section data-background="#297f79">
+          <p>Har nå over <code>90 000</code> pakker delt.</p>
+          <p>Med over <code>7 000 000</code> nedlastninger om dagen.</p>
+        </section>
+
+        <section data-background="#297f79">
+          <h3>«Felles filosofi» for Node.js brukere er å lage små delte pakker som kan gjenbrukes.</h3>
+        </section>
+
+        <section data-background="#297f79">
+          <p>Søk på f.eks google etter <code>node mac notification center</code> gir <code>node-notifier</code>.</p>
+        </section>
+
+        <section  data-background="#297f79">
+<pre><code data-trim class="bash">
+$ npm install --save node-notifier
+</code></pre>
+<pre class="fragment"><code data-trim class="javascript">
+// File: test.js
+var Notification = require('node-notifier');
+
+new Notification().notify({
+  message: 'Hello World!'
+}); // Sends a message to OS X
+</code></pre>
+<pre class="fragment"><code data-trim class="bash">
+$ node test.js
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2>Node.js som tooling</h2>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2>Kan ha litt lik arkitektur som *NIX</h2>
+          <p>Streaming av data uten å buffre alt i minnet.</p>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h3>Lett tilgang på CLI-argumenter</h3>
+<pre><code data-trim class="javascript">
+// test.js
+console.log(process.argv);
+</code></pre>
+        </section>
+
+        <section  data-background="#0a3c59">
+<pre><code data-trim class="bash">
+➜  node test.js foo bar
+[ 'node',
+  '/Users/macgyver/test.js',
+  'foo',
+  'bar' ]
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+          <p>Enkelt API, enkelt språk, mange eksisterende moduler.</p>
+          <p>Gjør det raskt og morsomt å lage små verktøy i.</p>
+        </section>
+
+        <section data-background="#a3354c">
+          <h2>Ikke alt trenger å være nyttig, så lenge man har det gøy med å programmere!</h2>
+        </section>
+
+        <section data-background="img/macgyver.gif"></section>
+
+        <section>
+          <h1>Kode!</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'linear',
+        backgroundTransition: 'slide',
+
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 1100px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>

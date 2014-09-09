@@ -1,0 +1,24 @@
+{
+  "name": "macgyver",
+  "version": "0.5.0",
+  "description": "",
+  "main": "config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "cheerio": "~0.17.0",
+    "minimatch": "~1.0.0",
+    "node-notifier": "~3.1.3",
+    "request": "~2.42.0",
+    "twit-stream": "~0.1.1",
+    "yargs": "~1.3.1",
+    "heartrate": "^0.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mikael Brevik",
+  "license": "MIT"
+}
