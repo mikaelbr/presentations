@@ -26,10 +26,10 @@ fs.readdir(baseLookup, function (err, files) {
     files = files.filter(minimatch.filter(pattern));
   }
 
-  files.forEach(renameFiles);
+  files.forEach(renameFile);
 });
 
-function renameFiles (filename, index) {
+function renameFile (filename, index) {
   filename = path.join(baseLookup, filename);
   var ext = path.extname(filename);
   var base = path.dirname(filename);
