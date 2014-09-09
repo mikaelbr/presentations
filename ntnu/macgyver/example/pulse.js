@@ -4,9 +4,19 @@ var argv = require('yargs').argv;
 
 var maxPulse = argv._[0];
 
+var hasBeenOver = false;
+
 pulse.on('data', function (current) {
-   if (current < maxPulse) return;
-   say('Calm down, Mikael.');
+  if (current < maxPulse) return;
+  if (hasBeenOver) process.exit(0);
+  hasBeenOver = true;
+
+
+  say('Calm down, Mikael.');
+  webcam.snapshot(function (err, buffer) {
+    fs.writeFileSync('snapshot.png', buffer);
+    webcam.destroy();
+  });
 });
 
 process.on('SIGINT', function () {
