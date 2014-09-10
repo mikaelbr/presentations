@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Instant data med Javscript Streams</title>
+    <title>Bli en MacGyver med Node.js</title>
 
     <meta name="description" content="Foredrag om bruk av streams i javascript">
     <meta name="author" content="Mikael Brevik">
@@ -65,26 +65,53 @@
             <li class="fragment">Node.js som tooling</li>
             <li class="fragment">Kodeeksempler</li>
           </ul>
+          <aside class="notes">
+            <p>Vi vil bare gå kjapt innom hvordan Node.js fungerer og hva det er for noe for å ha et grunnlag.</p>
+            <p>En veldig positiv ting med Node.js, som vi vil se mer på, er at det er veldig mange eksisterende pakker som kan brukes.</p>
+            <p>Hele hensikten med dette foredraget er å kunne vise hvor enkelt man kan programmere ting med bruk av Node.js, men det kunne like gjerne ha vært andre plattformer – så lenge man syns det er gøy.</p>
+            <p>Med å ha det gøy med programmering lærer man mer. Å lage små verktøy er da perfekt da det tar kort tid og man trenger ikke å jobbe flere dager eller dedikere lang tid til å gjøre det.</p>
+            <p>Helt til slutt skal vi gå igjennom noen kjappe kodesnutter jeg skrev til dette foredraget som jeg hadde det morsomt med.</p>
+          </aside>
+
         </section>
 
         <section data-background="#a3354c">
           <h2>Node.js</h2>
           <p>Googles V8 Javascript-engine med et ekstra API som tillater oss å bruke Javascript som et serversidespråk.</p>
+
+          <aside class="notes">
+            <p>Først lansert i 2009 av Ryan Dahl, som på den tiden, såvidt jeg husker, jobbet for Joyent.</p>
+          </aside>
         </section>
 
         <section data-background="#a3354c">
           <h3>Ettersom det er Javascript kan man bruke erfaringer fra nettleseren.</h3>
           <p>I enkelte tilfeller kan man også dele kode mellom tjener og klient.</p>
+
+          <aside class="notes">
+            <p>Eksempler på det man kan dele er domenelogikk, validering, modeller eller ligende.</p>
+          </aside>
         </section data-background="#a3354c">
 
         <section data-background="#a3354c">
           <p>Som med Javascript for vi et ikke-blokkerende (asynkront) miljø, uten trådhåndtering.</p>
           <p>Kjappheten til V8 og den asynkrone modellen gjør at Node.js egner seg godt til input og output operasjoner.</p>
+
+          <aside class="notes">
+            <p>I Javascript har man en eventloop med flere steg som håndterer forskjellig typer kode.</p>
+            <p>Du kan utsette enkelte operasjoner og ta de igjen senere i en eventloop.</p>
+            <p>I mellomtiden da kan man gjøre andre operasjoner.</p>
+            <p>Eksempelvis, kan man starte å lese fra en fil, men ikke håndtere dette før innholdet er klart.</p>
+          </aside>
         </section>
 
         <section data-background="#a3354c">
           <p>Det som gjør det kjapt for I/O, gjør det ikke så godt egnet til tunge CPU operasjoner</p>
           <p>Disse vil da blokkere kjøringen, og det gjør at vi mister fordelen med asynkronitet.</p>
+
+          <aside class="notes">
+            <p>Dersom du opptar CPU vil du ikke ha noe effekt med asynkronitet.</p>
+          </aside>
         </section>
 
         <section  data-background="#a3354c">
@@ -98,6 +125,17 @@ http.createServer(function (req, res){
   fs.createReadStream('file.dat').pipe(res);
 }).listen(3000);
 </code></pre>
+
+          <aside class="notes">
+            <p>
+              Her ser vi et eksempel på hvordan vi kan opprette en HTTP tjener som
+              streamer en fil til klienten.
+            </p>
+            <p>
+              Vi ser at vi kan gjøre ting på et litt lavere nivå om vi ønsker det.
+              Det finnes også API-endepunkt for rene TCP-kall.
+            </p>
+          </aside>
         </section>
 
         <section data-background="#297f79">
@@ -105,7 +143,19 @@ http.createServer(function (req, res){
         </section>
 
         <section data-background="#297f79">
-          <p>Har et utrolig voksende community hvor fokuset er stort på modulæritet og kode-deling.</p>
+          <p>Har et utrolig voksende community hvor modulæritet og kode-deling er i fokus.</p>
+          <aside class="notes">
+            <p>
+              Det finnes pakker for å gjøre det meste, og dette er ikke begrenset til tooling,
+              eller webutvikling, men det er også kode for roboter, kamera-integreringer,
+              moduler for Nevrale Nett og maskinlæring.
+            </p>
+            <p>
+              Men det og også veldig mange pakker for asset håndtering som kompilering av
+              LESS, SASS, CoffeeScript eller lignende.
+            </p>
+          </aside>
+
         </section>
 
         <section data-background="#297f79">
@@ -115,10 +165,19 @@ http.createServer(function (req, res){
 
         <section data-background="#297f79">
           <h3>«Felles filosofi» for Node.js brukere er å lage små delte pakker som kan gjenbrukes.</h3>
+
+          <aside class="notes">
+            <p>Fordelen er at alle pakker i utgangspunktet er lokale til prosjektet. Det betyr at
+              to prosjekter kan være avhengig av to forskjellige versjoner av et bibliotek.</p>
+            <p>Dette er i motsetning til f.eks PIP/easy_install i Python.</p>
+          </aside>
         </section>
 
         <section data-background="#297f79">
           <p>Søk på f.eks google etter <code>node mac notification center</code> gir <code>node-notifier</code>.</p>
+          <aside class="notes">
+            <p>Et kjapt blikk på dokumentasjonen ser vi hvordan vi kan bruke det.</p>
+          </aside>
         </section>
 
         <section  data-background="#297f79">
@@ -130,12 +189,16 @@ $ npm install --save node-notifier
 var Notification = require('node-notifier');
 
 new Notification().notify({
-  message: 'Hello World!'
+  message: 'Hello, World!'
 }); // Sends a message to OS X
 </code></pre>
 <pre class="fragment"><code data-trim class="bash">
 $ node test.js
 </code></pre>
+          <aside class="notes">
+            <p>Dette vil sende en melding til Notification Center på Mac.</p>
+            <p>Hadde også fungert på Linux og på Windows med Growl.</p>
+          </aside>
         </section>
 
         <section data-background="#0a3c59">
