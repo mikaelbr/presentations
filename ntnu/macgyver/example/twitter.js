@@ -14,7 +14,7 @@ var stream = new Twitter(options).filter({ track: 'ntnu' });
 
 stream.on('data', function (data) {
   if (!data) return;
-  
+
   notifier.notify({
     title: 'New Twitter Mention:',
     message: data.text

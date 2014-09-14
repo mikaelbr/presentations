@@ -21,8 +21,8 @@ pulse.on('data', function (current) {
   if (hasBeenOver) process.exit(0);
   hasBeenOver = true;
 
-  // Say something thorugh the commandline
-  say('Calm down, Mikael.');
+  // Say something thorugh the command line
+  say('Dudu dudu duu, dudu duu.');
 
   // Take image snapshot
   webcam.snapshot(function (err, buffer) {
@@ -38,6 +38,6 @@ process.on('SIGINT', function () {
 });
 
 function say (message) {
-  // Execute command <say -v Vick "message"> through command line
-  return exec(['say', '-v', 'Vick', '"' + message + '"'].join(' '));
+  // Execute command <say -v Alex "message"> through command line
+  return exec(['say', '-v', 'Alex', '"' + message + '"'].join(' '));
 }

@@ -33,10 +33,10 @@ body {
 .reveal h6 {
   margin: 0 0 20px 0;
   color: #eeeeee;
-  font-family: Georgia, sans-serif;
-  line-height: 0.9em;
+  font-family: "League Gothic", Impact, sans-serif;
+  line-height: 1.2em;
   letter-spacing: 0em;
-  text-transform: none;
+  text-transform: uppercase;
   text-shadow: none; }
 
 .reveal h1 {
@@ -132,6 +132,15 @@ body {
  *********************************************/
 .reveal .slide-number {
   color: #fd5157; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6,
+.reveal p {
+  text-align: left; }
 
 body:before {
   position: absolute;
