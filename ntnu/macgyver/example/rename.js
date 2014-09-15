@@ -7,7 +7,7 @@ var baseLookup = argv.base;
 var pattern = argv.pattern;
 var newName = argv.name;
 
-if(!baseLookup) {
+if (!baseLookup) {
   baseLookup = process.cwd();
   console.info('No base directory found. Using current directory.');
 }
