@@ -3,7 +3,14 @@ var exec = require('child_process').exec;
 var camera = require('camera');
 var BleHR = require('heartrate');
 var argv = require('yargs').argv;
-var maxPulse = argv._[0];
+var maxPulse = argv.max;
+
+if (!maxPulse) {
+  console.warn('Default max pulse of 140 is used. Define with --max');
+  maxPulse = 140;
+} else {
+  console.log('Using max pulse', maxPulse);
+}
 
 var hasBeenOver = false;
 
@@ -18,11 +25,13 @@ var webcam = camera.createStream();
 
 // Listen for heartrate data
 pulse.on('data', function (current) {
+  current = Number(current.toString());
+  console.log('pulse:', current);
   if (current < maxPulse) return;
   if (hasBeenOver) process.exit(0);
   hasBeenOver = true;
 
-  // Say something thorugh the command line
+  // Say something through the command line
   say('Dudu dudu duu, dudu duu.');
 
   // Take image snapshot
@@ -44,5 +53,7 @@ function say (message) {
 
 
 process.on('SIGINT', function () {
+  console.log('Quitting');
+  webcam.destroy();
   process.exit(0);
 });
