@@ -68,8 +68,8 @@
             <p>Vi vil bare gå kjapt innom hvordan Node.js fungerer og hva det er for noe for å ha et grunnlag.</p>
             <p>En veldig positiv ting med Node.js, som vi vil se mer på, er at det er veldig mange eksisterende pakker som kan brukes.</p>
             <p>Hele hensikten med dette foredraget er å kunne vise hvor enkelt man kan programmere ting med bruk av Node.js, men det kunne like gjerne ha vært andre plattformer – så lenge man syns det er gøy.</p>
-            <p>Med å ha det gøy med programmering lærer man mer. Å lage små verktøy er da perfekt da det tar kort tid og man trenger ikke å jobbe flere dager eller dedikere lang tid til å gjøre det.</p>
-            <p>Helt til slutt skal vi gå igjennom noen kjappe kodesnutter jeg skrev til dette foredraget som jeg hadde det morsomt med.</p>
+            <p>Med å ha det gøy med programmering lærer man mer. Å lage små verktøy er da perfekt da det tar kort tid og man trenger ikke å jobbe flere dager.</p>
+            <p>Helt til slutt skal vi gå igjennom noen kjappe kodesnutter jeg skrev til dette foredraget som er potensielt helt meningsløse.</p>
           </aside>
 
         </section>
@@ -78,9 +78,9 @@
           <h1>Node.js: Googles V8 + API</h1>
 
           <aside class="notes">
-            <p>Googles V8 Javascript-engine med et ekstra API som tillater oss å bruke Javascript som et serversidespråk.</p>
             <p>Først lansert i 2009 av Ryan Dahl, som på den tiden, såvidt jeg husker, jobbet for Joyent.</p>
-            <p>I nettleseren har du ting som setTimeout, setInterval osv, men det er ikke i javascript-motoren seg selv.</p>
+            <p>Googles V8 Javascript-engine med et ekstra API som tillater oss å bruke Javascript som et serversidespråk. En JS-engine er den som tolker og kjører selve javascriptet.</p>
+            <p>I nettleseren har du ting som setTimeout, setInterval osv, men det er ikke i javascript-motoren seg selv - men implementert i nettleseren.</p>
             <p>Node.js har derfor et C++ lag på toppen av V8 for å ha med disse funksjonene.</p>
           </aside>
         </section>
@@ -89,12 +89,12 @@
           <h1>Ikke-blokkerende (asynkront) miljø, uten trådhåndtering</h1>
 
           <aside class="notes">
-            <p>Som med Javascript for vi et ikke-blokkerende (asynkront) miljø, uten trådhåndtering.</p>
-            <p>Kjappheten til V8 og den asynkrone modellen gjør at Node.js egner seg godt til input og output operasjoner.</p>
+            <p>Som med Javascript i nettleseren, får vi et ikke-blokkerende (asynkront) miljø, uten trådhåndtering.</p>
             <p>I Javascript har man en event loop med flere steg som håndterer forskjellig typer kode.</p>
-            <p>Du kan utsette enkelte operasjoner og ta de igjen senere i en eventloop.</p>
-            <p>I mellomtiden da kan man gjøre andre operasjoner.</p>
+            <p>Du kan utsette enkelte operasjoner og ta de igjen senere i en eventloop (når callstacken er tom).</p>
+            <p>I mellomtiden da kan man gjøre andre operasjoner. Dette er det som er asynkronitet.</p>
             <p>Eksempelvis, kan man starte å lese fra en fil, men ikke håndtere dette før innholdet er klart.</p>
+            <p>Denne asynkrone modellen gjør at Node.js egner seg godt til input og output operasjoner.</p>
           </aside>
         </section>
 
@@ -102,8 +102,7 @@
           <h1>Ikke for CPU-intensitive oppgaver</h1>
           <aside class="notes">
             <p>Det som gjør det kjapt for I/O, gjør det ikke så godt egnet til tunge CPU operasjoner</p>
-            <p>Disse vil da blokkere kjøringen, og det gjør at vi mister fordelen med asynkronitet.</p>
-            <p>Dersom du opptar CPU vil du ikke ha noe effekt med asynkronitet.</p>
+            <p>Disse vil da blokkere kjøringen (callstacken blir aldri tom), og det gjør at vi mister fordelen med asynkronitet.</p>
           </aside>
         </section>
 
@@ -111,7 +110,7 @@
           <h1>Kan bruke erfaringer fra nettleseren</h1>
 
           <aside class="notes">
-            <p>I enkelte tilfeller kan man også dele kode mellom tjener og klient.</p>
+            <p>Ettersom det er Javascript kan man bruke språkerfaringer man har fra nettleseren. I enkelte tilfeller kan man også dele kode mellom tjener og klient.</p>
             <p>Eksempler på det man kan dele er domenelogikk, validering, modeller eller ligende.</p>
           </aside>
         </section data-background="#a3354c">
@@ -143,8 +142,8 @@ http.createServer(function (req, res) {
         <section data-background="#297f79">
           <h1>Massivt økosystem</h1>
           <aside class="notes">
-            <p>Node har et massivt økosystem og Open Source aktivitet, som for mange er det største trekkplasteret.</p>
-            <p>Man har NPM som er pakkesystemet som blir brukt I node, men som man også kan/burde bruke for frontend.</p>
+            <p>Node har et massivt økosystem og Open Source aktivitet, som for mange er det største guleroten.</p>
+            <p>Man har NPM (node packaged modules eller nice people matters som de ofte kaller seg) som er pakkesystemet som blir brukt I node, men som man også kan/burde bruke for frontend.</p>
           </aside>
         </section>
 
@@ -154,12 +153,11 @@ http.createServer(function (req, res) {
             <p>Har et utrolig voksende community hvor modulæritet og kode-deling er i fokus.</p>
             <p>
               Det finnes pakker for å gjøre det meste, og dette er ikke begrenset til tooling,
-              eller webutvikling, men det er også kode for roboter, kamera-integreringer,
-              moduler for Neurale Nett og maskinlæring.
+              eller webutvikling, men det er også kode for roboter, kamera-integrasjon,
+              moduler for Neurale Nett, maskinlæring og naturlig språkprosessering.
             </p>
             <p>
-              Men det og også veldig mange pakker for asset håndtering som kompilering av
-              LESS, SASS, CoffeeScript eller lignende.
+              Men det og også veldig mange pakker for asset håndtering (altså filer til nettleser og frontend) som kompilering av LESS, SASS, CoffeeScript eller lignende.
             </p>
           </aside>
 
@@ -221,8 +219,8 @@ $ node test.js
           <h1>Node.js som tooling</h1>
 
           <aside class="notes">
-            <p>Du har enkle asynkrone API-er for interagering med filsystem, tcp-connections, eller til og med bluetooth low energy.</p>
-            <p>I tillegg finnes det veldig mange tooling verktøy som en kan bygge oppå i NPM.</p>
+            <p>Ettersom du har enkle asynkrone API-er for interagering med filsystem, tcp-connections, eller til og med bluetooth low energy, er det veldig enkelt å starte med Node.js som command line verktøy.</p>
+            <p>I tillegg finnes det veldig mange tooling-verktøy som en kan bygge oppå i NPM.</p>
           </aside>
         </section>
 
@@ -248,6 +246,11 @@ console.log(process.argv);
   'foo',
   'bar' ]
 </code></pre>
+          <aside class="notes">
+            <p>I node har vi, på lik linje som mange andre språk, veldig enkel tilgang på command line argumenter som blir sendt med.</p>
+            <p>Her ser vi at vi har en global variabel process som inneholder argumentene.</p>
+          </aside>
+
         </section>
 
         <section data-background="#0a3c59">
@@ -274,7 +277,7 @@ console.log(process.argv);
               så lenge man har det moro og det er gøy å programmere.
             </p>
             <p>
-              Kanskje det til og med det kommer noe nyttig derivert fra prosjektet.
+              Kanskje det til og med det kommer noe nyttig fra prosjektet på et senere tidspunkt. Man lærer seg byggesteiner og tankemåter som man kan benytte i mer seriøse prosjekter i fremtiden.
             </p>
           </aside>
         </section>
