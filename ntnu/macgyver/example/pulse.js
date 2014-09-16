@@ -50,8 +50,6 @@ function say (message) {
 
 //==================================================
 
-
-
 process.on('SIGINT', function () {
   console.log('Quitting');
   webcam.destroy();
