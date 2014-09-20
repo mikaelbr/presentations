@@ -7,6 +7,8 @@
  - [Slides](http://git.mikaelb.net/ndc/talk/)
  - [Code](https://github.com/mikaelbr/ndc/tree/gh-pages/examples)
 
+### Introduction in ES6 Destructuring @bartjs
+ - [Interactive Slides](git.mikaelb.net/presentations/bartjs/destructuring)
 
 ### Norwegian
 
@@ -20,6 +22,13 @@
  - [Slide source](ntnu/stream/talk)
  - [Code](ntnu/stream/streams)
  - [Hosted slides](http://git.mikaelb.net/presentations/ntnu/stream/talk/#/)
+
+---
+
+#### Bli MacGyver med Node.js
+ - [Slide source](ntnu/macgyver/slides)
+ - [Code](ntnu/macgyver/example)
+ - [Hosted slides](git.mikaelb.net/presentations/ntnu/macgyver/slides/)
 
 ---
 
