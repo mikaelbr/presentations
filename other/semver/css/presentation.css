@@ -1,0 +1,40 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+}
+.about-me {
+  position: relative;
+  height: 100%;
+}
+
+.about-me .about-description {
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  padding: 20px;
+}
+
+.about-me .about-description h1 {
+  color: #000000;
+}
+
+.reveal h1 small {
+  vertical-align: baseline;
+}
+
+.reveal section .no-style {
+  border: 0;
+  background: inherit;
+}
+
+.reveal pre code {
+  font-size: 2em;
+  line-height: 1.4em;
+}
+
+.reveal h1 .highlight {
+  color: #fdf6e3;
+}

@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Versioning Paradise</title>
+
+    <meta name="description" content="Foredrag om bruk av streams i javascript">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section class="about-me" data-background="./img/gangsta.gif">
+          <div class="about-description">
+            <h1>Versioning Paradise</h1>
+          </div>
+        </section>
+
+        <section data-background="#a3354c">
+          <h1>Status Quo</h1>
+
+          <aside class="notes">
+            <p>
+              Foreløpig er det en grei skjema for versjonering for alle plattformer.
+              Er forholdsvis enig i hvordan en versjon skal se ut. Man har
+              tre siffer separert av punktum osv, men det er ikke klart definert
+              hva hvert ledd i skjemaet betyr.
+            </p>
+            <p>
+              Hva er det første tallet? Ja, det står kanskje "Major", men hva
+              innebærer det? Hva kan vi forvente dersom vi ser det er en ny
+              versjon der minor er ett tall høyere?
+            </p>
+            <p>
+              Dette fører til usikkerhet for oppgradering og potensielt et system
+              med mange feil og da lav kvalitet.
+            </p>
+            <p>
+              I denne presentasjonen skal jeg gå igjennom hva semantic versioning
+              er og hvordan det kan hjelpe oss forbedre status quo og usikkerhetene
+              rundt versjonering.
+            </p>
+            <p>
+              Jeg skal også gå igjennom konsekvensene for å ikke ha retningslinjer
+              når økosystemer vokser og vi blir mer og mer avhengig av tredjepartskode.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Semantic Versioning</h1>
+
+          <aside class="notes">
+            <p>En standard og spesifikasjon som er nå på versjon 2. Først konseptualisert av Tom Preston-Werner fra Gravatar og Github.</p>
+            <p>En voksende trend og ser ut til å bli den standarden mange kommer til å bruke i fremtiden.</p>
+            <p>Har vært vanlig i node/npm universet lenge, men er i gang med å bli mer populært for nuget og maven også</p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>
+            <code>
+              <span class="fragment highlight-current-blue" data-fragment-index="3">Major</span>.<span class="fragment highlight-current-blue" data-fragment-index="2">Minor</span>.<span class="fragment highlight-current-blue" data-fragment-index="1">Patch</span>
+            </code>
+          </h1>
+
+          <aside class="notes">
+            <p>
+              Forutsetter et PUBLIC API. 
+            </p>
+            <p>Major - For breaking changes</p>
+            <p>Minor - For API additions, men bakoverkompabilitet</p>
+            <p>Patch - Bug-fikses</p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1><code>1.0.0</code></h1>
+
+          <aside class="notes">
+            <p>Versjon 1.0.0 er en sær-versjon. Etter 1.0.0 er APIet stabilt og det skal ikke endres uten en major release.</p>
+            <p>Det vil si at før 1.0.0 kan man teknisk sett endre API-et på en Minor-release</p>
+            <p>Men det er blitt populært å gå opp til 1.0.0 så tidlig som mulig får å commite seg til en stabel release.</p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Ranges</h1>
+          <h2 class="fragment"><code>^1.0.0</code></h2>
+          <h2 class="fragment"><code>&gt;=1.0.0</code></h2>
+          <h2 class="fragment"><code>&lt;1.0.0</code></h2>
+          <h2 class="fragment"><code>1.2.3-2.3.4</code></h2>
+
+          <aside class="notes">
+            <p>
+              Nå som vi har en semantikk tilknyttet til versjonene betyr det rett og slett
+              at vi kan definere en rekkevidde av versjoner vi tillatter systemet
+              vårt å automatisk oppgradere. Dette er den store verdien vi får. Vi
+              skal i ugangspunktet være trygge på at det er mulig å oppgradere
+              og det kan gjøres automatisk.
+            </p>
+            <p>
+              Eksempel på en range er ^1.0.0. Det betyr alle minor og patch releaser
+              opp til neste major release. Altså fra 1.0.0 opp til men ikke inkludert
+              2.0.0.
+            </p>
+            <p>
+              Bla bla bla. Forklar rangene som er vist.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Pre-stable</h1>
+          <h2><code>^0.5.0</code></h2>
+          <h2 class="fragment">=<code>0.5.0-0.6.0</code></h2>
+
+          <aside class="notes">
+            <p></p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2>package.json</h2>
+<pre><code data-trim class="json">
+{
+  dependencies: {
+    "module": "^1.0.0",
+    "other": "*"
+  }
+}
+</code></pre>
+<a href="https://github.com/npm/node-semver">github.com/npm/node-semver</a>
+
+          <aside class="notes">
+            <p></p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Nuget/Maven</h1>
+          <h2 class="fragment"><code>[1.0,2.0)</code></h2>
+          <h2 class="fragment"><code>[1.0.0,)</code></h2>
+          <h2 class="fragment"><code>(,1.0.0)</code></h2>
+          <h2 class="fragment"><code>[1.2.3,2.3.4]</code></h2>
+          <aside class="notes">
+            <p></p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2>packages.config</h2>
+<pre><code data-trim class="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;packages&gt;
+  &lt;package id="SomePackage" version="2.1.0"
+      allowedVersions="[2,3)" /&gt;
+&lt;/packages&gt;
+</code></pre>
+<a href="http://docs.nuget.org/docs/reference/versioning">docs.nuget.org/docs/reference/versioning</a>
+          <aside class="notes">
+            <p></p>
+          </aside>
+        </section>
+
+        <section data-background="#a3354c">
+          <h1>Hvorfor bry oss?</h1>
+
+          <aside class="notes">
+            <p>
+              Mer og mer modulær kode-trend, flere avhengigheter. På lik linje
+              som vi bug-fikser vår egen kode for å skape kvalitet og robusthet,
+              blir det fikset bugs på andres og. Da må vi oppdatere de, og vite
+              når vi kan oppdatere eller ikke, uten at det brekker vår kode.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#a3354c">
+          <h1>Konsekvenser med versjons-anarkisme</h1>
+
+          <aside class="notes">
+            <p>
+              Som vi ser, så trenger vi at pakke-forfattere følger standarden
+              for at vi kan være sikker på at rangene skal fungere.
+            </p>
+            <p>
+              Dersom vi sier at vi er villig til å ta inn versjon 1.0.0 og opp
+              til 2.0.0, for at vi vet at det ikke skal brekke, og det brekker,
+              fører det til at vi blir usikker og ikke minst kan det føre til mye
+              tid med debugging og eventuelt oppgradering.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#a3354c">
+          <h1><small>Case #1:</small> Underscore</h1>
+          <h2>Versjon 1.7.0</h2>
+
+          <aside class="notes">
+            <p>
+              Det var en relativt kontroversiell hendelse tidligere i år, der
+              Jeremy Ashkenas stod på sitt og nektet for at semantic versioning
+              hadde noe for seg.
+            </p>
+            <p>
+              Han tøyset med at han fuglte Romantic Versioning der han tok det
+              litt på følelsen og hva som føltes rett. En mer synsete fremgangsmåte.
+              Dette til stor frustrasjon for store deler av communitet.
+            </p>
+            <p>
+              Underscore var den modulen på NPM som flest var avhengig av
+              (nesten 8000). Det er potensielt mange kodebaser som blir ødelagt.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#a3354c">
+          <blockquote>
+            «You could evaluate a given piece of software by name + version,
+            and get a feeling for how far away version 2.0.1 was from version 2.8.0.»
+            <br />
+            <em>– Jeremy Ashkenas</em>
+          </blockquote>
+
+          <aside class="notes">
+            <p>
+              Dette er ikke en løsning og tankegang som skalerer dersom det blir
+              vanligere med flere og flere avhengigheter.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#a3354c">
+          <h1><small>Case #2:</small> Angular</h1>
+          <h2>Versjon 1.3.4, 1.3.3, ...</h2>
+
+          <aside class="notes">
+            <p></p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Lovlydiges forsvar</h1>
+          <h2>Lås dependencies</h2>
+
+          <aside class="notes">
+            <p>
+              Så hva skal man gjøre dersom man må bruke et bibliotek eller kode
+              som er uforutsigbar og anarkistisk? Man kan låse avhengigheten på
+              akkurat den pakken for den versjonen du vet fungerer.
+            </p>
+            <p>
+              Man kan fremdeles oppdatere, men det krever mer manuell jobb og
+              man må gå igjennom de endringene som er gjort og sørge for at koden
+              ikke brekker.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="json">
+{
+  dependencies: {
+    "module": "^1.0.0",
+    "other": "1.3.0"
+  }
+}
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;packages&gt;
+&lt;package id="SomePackage" version="2.1.0"
+    allowedVersions="[2.1.0]" /&gt;
+&lt;/packages&gt;
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Hvordan spotte anarkisme?</h1>
+          <aside class="notes">
+            <p>
+              Det er som regel veldig enkelt å se om en pakke er til å stole på.
+            </p>
+            <p>
+              De fleste pakker har en changelog der man kan se hva som er endret.
+              Dersom det har skjedd en breaking change på en release som ikke er
+              major, er det et tydelig tegn på at dette ikke er til å stole på.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Utopi</h1>
+          <aside class="notes">
+            <p>
+              Dersom alle hadde fulgte semantic versioning kunne vi ha stolt
+              på at vi hadde tillatt alle patch og minor releases. Vi kunne fått
+              oppdateringer og bug-fikser uten å bekymre oss for at koden vår
+              brekker.
+            </p>
+            <p>
+              Verdt å merke, man må fremdeles på et tidspunkt gå inn å sjekke
+              change log og se hva som brekker på major release, men det skjer
+              i alle fall under kontrollerte omstendigheter.
+            </p>
+            <p>
+              Ja. Det kan være at en tredje part introduserer en ny bug, men
+              heldigvis, ettersom vi har en skikkelig avhengighetshåndtering
+              og en package manager, kan vi bare oppdatere en patch release
+              når det blir fikset.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background-color="#a3354c" data-background="./img/npm.png" data-background-size="900px">
+        </section>
+
+        <section data-background-color="#a3354c" data-background="./img/maven.png" data-background-size="900px">
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Fremtiden</h1>
+          <aside class="notes">
+            <p>
+              Jeg tror at det kommer til å bli større og større krav til
+              utviklere som gir ut prosjekter til å følge Semver. Det er blitt
+              ganske standard innen noen deler alt, og jeg tror det kommer til
+              å øke mer og mer i populæritet.
+            </p>
+            <p>
+              Det er stort nå innen NPM/Bower, selv om alle ikke følger det 100% enda,
+              men det er og i gang med å spre seg ut i andre miljøer som Nuget
+              og Maven. Jeg tror det kommer til å bli mer aktuelt der fremover også.
+            </p>
+            <p>
+              Nei, det er ikke helt perfekt. Det kan enda skje bugs med oppdateringer
+              og utviklere kan brekke API-er med uhell. Men det er bedre enn det vi har
+              nå. Det er en mye mer eksplisitt avtale mellom produsenter og konsumenter,
+              og det er noe vi trenger for å kunne stole på hverandre og utvikle fremover.
+            </p>
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        history: true,
+        margin: 0.05,
+
+        width: '100%',
+        height: '100%',
+
+        center: false,
+        transition: 'linear',
+        backgroundTransition: 'slide',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
