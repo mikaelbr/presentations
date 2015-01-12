@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Node.js: Del I</title>
+
+    <meta name="description" content="Foredrag om bruk av streams i javascript">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/railscast.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <h1>Node.js: Del I</h1>
+          <h2>– A New Hope</h2>
+        </section>
+
+        <section data-background="./img/ryan_dahl.png">
+          <aside class="notes">
+            <p>
+              Det hele startet tilbake i 2009, når denne karen, Ryan Dahl (en ingeniør
+              hos Joyent), irriterte
+              seg over at en progressbar på Flicker gjorde regelmessige AJAX-requests
+              opp mot serveren for å sjekke hvor langt den hadde kommet. Han tenkte
+              det måtte være en enklere måte å gjøre det på.
+            </p>
+            <p>
+              Etter en del utforsking og en konklusjon om at Ruby var et alt for
+              tregt språk, og at ingen ville bruke C, eller at heller ikke
+              python, lua eller Haskell gjorde biffen, fikk han en åpenbaring
+              om Javascript.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="./img/Chrome-V81.jpg">
+          <aside class="notes">
+            <p>
+              Noen måneder tidliger (september 2008), hadde dette blitt open sourca.
+              En javascript engine som kjørte i Chrome. V8 kompillerer ting
+              (just in time) ned til maskinkode fremfor å kompillere det ned før
+              noe blir kjørt. Slik sett kan det optimaliserers mens det faktisk kjøres
+              og være kjapp.
+            </p>
+            <p>
+              Men en JavaScript Engine er ikke alt en trenger for å kjøre et program.
+              Det kreves også en Runtime. Tidligere var det slik at nettleserne stod
+              for runtime, og f.eks stod for å ha en kø av kode som JS motoren (V8),
+              skulle kjøre. Runtimen har også API-er for alt fra streng-operasjoner
+              til radix-transformasjoner.
+            </p>
+          </aside>
+
+        </section>
+
+        <section data-background="./img/cpp.png">
+          <aside class="notes">
+            <p>
+              Ettersom Ryan Dahl skulle lage en webserver, kunne han ikke bruke
+              Nettleseren som en runtime, men poenget var å lage en egen; dette
+              er Node.js - en runtime som bruker V8 som engine.
+            </p>
+            <p>
+              Ryan Dahl skrev mye av API-et for Runtimen i C++ og en
+              ganske stor andeli ren Javascript.
+              Resultatet av Google V8 + C++ + Javascript er Node.js.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="./img/JavaScript-logo.png"  data-background-size="400px" data-background-repeat="repeat"></section>
+
+        <section data-background="./img/nodejs.png">
+          <aside class="notes">
+            <p>
+              Node.js, lansert først i 2009 på JSConf EU, en årlig
+              JS-konferanse i Berlin.
+            </p>
+            <p>
+              Etter dette har det blitt ganske populært og f.eks i 2011 samarbeidet
+              Microsoft med Joyent (firmaet Ryan Dahl jobbet for), for å få Windows
+              støtte til Node.js. Så selv om Node.js, når først lansert, kun
+              var for Linux, er det nå ansett som kryssplattform og fungerer godt
+              i de fleste miljøer.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Hva oppnår vi?</h1>
+          <h2 class="fragment">JavaScript som serverside språk!</h2>
+
+          <aside class="notes">
+            <p>
+              Hva oppnår vi med Node.js?
+            </p>
+            <p>
+              Vi får Javascript som et serversidespråk og alle fordeler og ulemper
+              dette fører med seg.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Ikke-blokkerende (asynkront) miljø, uten trådhåndtering</h1>
+
+          <aside class="notes">
+            <p>
+              Det betyr at vi får et ikke-blokkerende og asynkront miljø uten noe
+              behov for trådhåndtering og da ingen concurrency issues som en
+              ofte kan ha.
+            </p>
+            <p>I Javascript har man en event loop med flere steg som håndterer forskjellig typer kode.</p>
+            <p>Vi vil se mer på denne EventLoopen senere i dag.</p>
+            <p>Men slik det kan funke er eksempelvis, man kan starte å lese fra en fil, men ikke håndtere dette før innholdet er klart.</p>
+            <p>Denne asynkrone modellen gjør at Node.js egner seg godt til input og output operasjoner.</p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Ikke for CPU-intensitive oppgaver</h1>
+          <aside class="notes">
+            <p>Det som gjør det kjapt for I/O, gjør det ikke så godt egnet til tunge CPU operasjoner</p>
+            <p>Disse vil da blokkere kjøringen (callstacken blir aldri tom), og det gjør at vi mister fordelen med asynkronitet.</p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Kan bruke erfaringer fra nettleseren</h1>
+
+          <aside class="notes">
+            <p>Ettersom det er Javascript kan man bruke språkerfaringer man har fra nettleseren. I enkelte tilfeller kan man også dele kode mellom tjener og klient.</p>
+            <p>Eksempler på det man kan dele er domenelogikk, validering, modeller eller ligende.</p>
+            <p>
+              Vi vil se på et eksempel med JavaScript for Node.js nå, men det kunne like
+              gjerne vært en del av en kode i Nettleseren.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="javascript">
+console.log(isAnagram('Elvis', 'Lives'));
+function sortedString (str) {
+  return str.toLowerCase().split('').sort().join('');
+}
+function isAnagram (a, b) {
+  return sortedString(a) === sortedString(b);
+}
+</code></pre>
+<pre class="fragment"><code data-trim class="bash">
+$ node file.js
+</code></pre>
+<pre class="fragment"><code data-trim class="bash">
+true
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Separation of Concern</h1>
+
+          <aside class="notes">
+            <p>
+              Et viktig aspekt med Node.js er at man må kunne dele opp koden
+              i flere moduler, og isolere privat kode fra public kode for å
+              designe API-surfaces.
+            </p>
+            <p>
+              Node.js bruker en variasjon av noe som heter CommonJS pattern
+              for å hente inn avhengigheter til en fil, eller eksportere
+              hvilke funksjoner som er tilgjengelig i en modul.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="javascript">
+// Using:
+console.log(isAnagram('Elvis', 'Lives'));
+
+// Private:
+function sortedString (str) {
+  return str.toLowerCase().split('').sort().join('');
+}
+
+// Public:
+function isAnagram (a, b) {
+  return sortedString(a) === sortedString(b);
+}
+</code></pre>
+          <aside class="notes">
+            <p>
+              Om vi følger eksemplet fra i sted, ser vi egentlig at vi har
+              en privat funksjon som ikke er en del av APIet vårt, og i tillegg
+              ønsker vi å splitte ut isAnagram slik at den kan gjenbrukes i flere
+              sammenhenger og kanskje til og med i nettleseren.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="javascript">
+// index.js (Using)
+var isAnagram = require('./isAnagram');
+console.log(isAnagram('Elvis', 'Lives'));
+</code></pre>
+
+<pre class="fragment"><code data-trim class="javascript">
+// isAnagram.js (module)
+
+// Expose publics
+module.exports = function isAnagram (a, b) {
+  return sortedString(a) === sortedString(b);
+}
+// Private
+function sortedString (str) {
+  return str.toLowerCase().split('').sort().join('');
+}
+</code></pre>
+          <aside class="notes">
+            <p>
+              Vi ønsker i bunn og grunn å bruke det på denne måten. Hente inn
+              avhengigheten og bruke den. Slik kan vi hente den inn i forskjellige
+              filer og i forskjellige kontekster.
+            </p>
+            <p class="fragment">
+              For å lage en slik modul kan vi lage en egen fil som bruker en
+              spesial-variabel kalt "module" for å eksponere en funksjon. Man
+              kan tenke på "module.exports" som et objekt som blir returnert
+              når noen requirer filen. Ettersom sortedString her ikke er
+              eksportert, vil den ikke være tilgjengelig utenfor modulen seg selv.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="javascript">
+// stringywingy.js (module)
+
+// Expose more functions
+module.exports.isAnagram = function (a, b) { /* ... */ }
+module.exports.isPalindrome = function (text) { /* ... */ }
+</code></pre>
+
+<pre class="fragment"><code data-trim class="javascript">
+// index.js (Using)
+var sw = require('./stringywingy');
+console.log(sw.isAnagram('Elvis', 'Lives')); //=> true
+console.log(sw.isPalindrome('Yo, banana boy!')); //=> true
+</code></pre>
+          <aside class="notes">
+            <p>
+              Vi kan også eksponere flere funksjoner av samme modul.
+            </p>
+            <p>
+              Da vil vi kunne bruke det på denne måten.
+            </p>
+          </aside>
+        </section>
+
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="javascript">
+// Using native APIs
+var path = require('path'); // note: not a relative path
+
+// resolve path from several links
+var folder = path.join('/foo', 'bar', 'baz/asdf', 'quux', '..');
+
+console.log(folder); //=> '/foo/bar/baz/asdf'
+</code></pre>
+          <aside class="notes">
+            <p>
+              Innebygde (native) moduler fungerer på akkurat samme måten. De
+              eksponerer et sett med funksjoner som man kan bruke.
+            </p>
+            <p>
+              Noen av de innebygde modulene er enkle wrappere for C++ moduler
+              (f.eks de som kommuniserer direkte med OS-et),
+              men det er rene Javascript lag på toppen som eksponerer funksjoner på
+              samme måte som den stringywingy modulen vi så tidligere.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Oppgaver</h1>
+<pre ><code data-trim>
+git clone https://github.com/bekk/node.js-ntnu
+</code></pre>
+<pre><code data-trim>
+/del1/exercises/part1/
+</code></pre>
+          <aside class="notes">
+            <p>
+              Nå skal vi lage vår egen stringywingy modul.
+            </p>
+            <p>
+              Oppgavene finnes i gitrepoet sett her og i mappen
+              /del1/exercises/part1/.
+            </p>
+            <p>
+              Det finnes også løsning i samme mappe dersom dere
+              står helt fast.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Eksterne moduler: NPM</h1>
+        </section>
+
+        <section data-background="./img/npm-screenshot.png">
+        </section>
+
+        <section data-background="./img/modulescount.png" data-background-size="80%" data-background-repeat="no-repeat"></>
+          <aside class="notes">
+            <p>
+              Data fra http://www.modulecounts.com/
+            </p>
+            <p>
+              Maven Central (Java) Avg growth: 120/day
+            </p>
+            <p>
+              NPM Avg growth: 194/day
+            </p>
+          </aside>
+        </section>
+
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="shell">
+npm install stringywingy
+</code></pre>
+<pre><code data-trim class="javascript">
+// Same as before, but note the path
+// no relative path, will look into `./node_modules/`
+var sw = require('stringywingy');
+
+console.log(sw.isAnagram('Clint Eastwood', 'Old west action')); //=> true
+console.log(sw.isPalindrome('Tacocat')); //=> true
+</code></pre>
+        </section>
+
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="shell">
+npm init
+</code></pre>
+<pre ><code data-trim class="json">
+{
+  "name": "foo",
+  "description": "A packaged foo fooer for fooing foos",
+  "author": "Bar, Foo Bar &lt;foobar@example.com&gt;",
+  "dependencies": {
+    "someDependency": "0.1.0"
+  }
+}</code></pre>
+<pre ><code data-trim class="shell">
+package.json
+</code></pre>
+
+        </section>
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="javascript">
+npm install --save stringywingy
+</code></pre>
+<pre ><code data-trim class="json">
+{
+  "name": "foo",
+  "description": "A packaged foo fooer for fooing foos",
+  "author": "Bar, Foo Bar &lt;foobar@example.com&gt;",
+  "dependencies": {
+    "someDependency": "0.1.0",
+    "stringywingy": "1.0.0"
+  }
+}</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="javascript">
+npm install --save-dev mocha
+</code></pre>
+<pre ><code data-trim class="json">
+{
+  "name": "foo",
+  "description": "A packaged foo fooer for fooing foos",
+  "author": "Bar, Foo Bar &lt;foobar@example.com&gt;",
+  "dependencies": {
+    "someDependency": "0.1.0",
+    "stringywingy": "1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "1.21.4"
+  }
+}</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="markdown">
+# Semantic Versioning Summary
+Given a version number MAJOR.MINOR.PATCH increment the:
+* MAJOR version on incompatible API changes
+* MINOR version on backwards-compatible functionality
+* PATCH version on backwards-compatible bug fixes
+
+Additional labels for pre-release and build metadata are available as
+extensions to the MAJOR.MINOR.PATCH format.
+</code></pre>
+        </section>
+
+
+        <section data-background="./img/module_for_that.jpg"></section>
+
+        <section data-background="./img/nyancat_telnet.png"></section>
+
+        <section data-background="./img/nyancat_telnet_running.png"></section>
+
+        <section data-background="#0a3c59">
+          <h1>Oppgaver</h1>
+          <pre><code data-trim>
+          /del1/exercises/part2/
+          </code></pre>
+          <pre><code data-trim class="javascript">
+          1. Del opp i moduler i «main.js»
+          </code></pre>
+          <pre><code data-trim class="javascript">
+          2. Gå igjennom «commandline_examples.js»
+          </code></pre>
+        </section>
+
+
+        <section  data-background="#0a3c59">
+          <h1>Kontrollflyt</h1>
+        </section>
+
+        <section data-background="./img/eventloop.png"></section>
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="js">
+var fs = require('fs'); // file system
+
+// Blocking
+var file = fs.readFileSync('somefile.dat');
+console.log('Sync:', file);
+
+// Async
+var aFile = fs.readFile('somefile.dat', function (err, data) {
+  console.log('Async:', data);
+});
+console.log('Will likely print before file');
+</code></pre>
+
+<pre class="fragment"><code data-trim class="js">
+Sync: &lt;Buffered contents&gt;
+Will likely print before file
+Async: &lt;Buffered contents&gt;
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="js">
+first(x, function (err, y) {
+  // Some logic here
+  second(y, function (err, z) {
+    // Some logic here
+    third(z, function (err, a) {
+      // do something a
+    });
+  });
+});
+</code></pre>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre ><code data-trim class="js">
+first(x, doOnFirst);
+function doOnFirst (y) {
+  // Some logic here.
+  second(y, doOnSecond);
+}
+function doOnSecond (z) {
+  // Some logic here.
+  third(z, final);
+}
+function final (a) {
+  // do something with a
+}
+</code></pre>
+        </section>
+
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="js">
+// Using external library (async.js)
+async.waterfall([
+  function (cb) {
+    // some logic
+    first(x, cb);
+  }, function (y, cb) {
+      // some logic
+      second(y, cb);
+    }, function (z, cb) {
+      // some logic
+      third(z, cb);
+}], function (error, a) { /* do something with a */ });
+</code></pre>
+        </section>
+
+<section data-background="#0a3c59">
+<pre><code data-trim class="js">
+// Using external library (Promise)
+firstPromise
+  .then(function (y) {
+    // Some Logic
+    return generateSecondPromise(y);
+  })
+  .then(function (z) {
+    // Some Logic
+    return generateThirdPromise(z);
+  })
+  .then(function (a) {
+    // Do something with a
+  });
+</code></pre>
+</section>
+
+        <section data-background="#0a3c59">
+          <h1>Workshops!</h1>
+        </section>
+
+
+        <section data-background="#0a3c59">
+          <h1>Installer</h1>
+<pre><code data-trim class="shell">
+$ npm install -g learnyounode
+$ learnyounode
+</code></pre>
+<pre><code data-trim class="shell">
+# Mer tid?
+$ npm install -g async-you
+$ async-you
+</code></pre>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        history: true,
+        margin: 0.05,
+
+        width: '100%',
+        height: '100%',
+
+        center: false,
+        transition: 'linear',
+        backgroundTransition: 'slide',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
