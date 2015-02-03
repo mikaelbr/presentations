@@ -1,0 +1,41 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+}
+.about-me {
+  position: relative;
+  height: 100%;
+}
+
+.about-me .about-description {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  background: rgba(0,0,0, .8);
+  padding: 20px;
+}
+
+.about-me .about-description h1,
+.about-me .about-description p {
+  display: block;
+  text-align: center;
+}
+
+.reveal section .no-style {
+  border: 0;
+  background: inherit;
+}
+
+.reveal pre code {
+  font-size: 2vw;
+  line-height: 1.4em;
+
+  max-height: 80%;
+}
+
+.reveal h1 .highlight {
+  color: #fdf6e3;
+}

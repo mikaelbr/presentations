@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Node.js: Del I</title>
+
+    <meta name="description" content="Foredrag om bruk av streams i javascript">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+    <link rel="stylesheet" href="css/presentation.css" id="theme">
+    <link rel="stylesheet" href="css/lamp.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/railscast.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <h1>Web Audio API</h1>
+          <h2>Kontroll &amp; Timing av Lyd</h2>
+        </section>
+
+        <section>
+<pre><code data-trim class="html">
+&lt;bgsound src="missionimpossible.md" loop="infinite" /&gt;
+</code></pre>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section data-background="./img/geocities1.png">
+        </section>
+
+        <section data-background="./img/geocities2.png">
+        </section>
+
+        <section data-background="./img/geocities3.png">
+        </section>
+
+        <section data-background="./img/giforama.gif">
+        </section>
+
+        <section data-background="./img/JavaScript-logo.png"  data-background-size="400px" data-background-repeat="repeat"></section>
+
+        <section data-background="#0a3c59">
+          <h1>Behov</h1>
+          <h2>Trenger vi det?</h2>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Hvordan?</h1>
+          <h2>Starter med <code>AudioContext</code></h2>
+
+<pre><code data-trim class="javascript">
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+</code></pre>
+
+          <aside class="notes">
+            <p>
+              Du vil som regel kun ha en audio context i dokumentet ditt. Det er mulig med flere,
+              slik som du kan med f.eks Canvas Context, men som regel vil du at lyden din vil leve
+              i samme context.
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h1>Routing Graph</h1>
+
+          <img src="./img/audio_graph.png" alt="Audio Graph" width="600px" />
+
+          <aside class="notes">
+            <p>Source nodes: Sound sources such as audio buffers, live audio inputs, audio-tags, oscillators, and JS processors.</p>
+            <p>Modification nodes: Filters, convolvers, panners, JS processors, etc.</p>
+            <p>Analysis nodes: Analyzers and JS processors</p>
+            <p>Destination nodes: Audio outputs and offline processing buffers</p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+<pre><code data-trim class="javascript">
+var source = audioCtx.createMediaStreamSource(stream);
+source.connect(analyser);
+analyser.connect(distortion);
+distortion.connect(biquadFilter);
+biquadFilter.connect(convolver);
+convolver.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+</code></pre>
+
+          <aside class="notes">
+            <p>
+            </p>
+          </aside>
+        </section>
+
+        <section data-background="#0a3c59">
+          <img src="./img/audio_graph2.png" alt="Audio Graph" height="750px" />
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+<pre><code data-trim class="javascript">
+// Get and decode asynchronously
+var request = new XMLHttpRequest();
+request.open('GET', url, true);
+request.responseType = 'arraybuffer';
+request.onload = () =>
+  context.decodeAudioData(request.response, playSound);
+request.send();
+
+function playSound(buffer) {
+  var source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source.start(0);
+}
+</code></pre>
+
+          <aside class="notes">
+            <p>
+            </p>
+          </aside>
+        </section>
+
+        <section>
+<pre><code data-trim class="javascript">
+navigator.getUserMedia({ audio: true }, function (stream) {
+  var source = context.createMediaStreamSource(stream);
+  source.connect(self.analyser);
+  requestAnimFrame(draw);
+}, console.error.bind(console));
+</code></pre>
+
+          <aside class="notes">
+            <p>
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          <h1>Visualisering</h1>
+          <p><button class="run-example-1">Kjør!</button></p>
+          <canvas class="example-1-canvas"></canvas>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+<pre><code data-trim class="javascript">
+var crossings = filter(frequenceData, function (amp) {
+  return amp >= threshold;
+}).length;
+
+var isClap = crossings > 20;
+if (isClap) numberCrossingsInRow++;
+if (!isClap && numberCrossingsInRow > 0) {
+  numberCrossingsInRow = 0;
+  doSomethingOnClap();
+}
+</code></pre>
+
+          <aside class="notes">
+            <p>
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          <button class="run-example-2">Kjør!</button>
+          <div id="lamp">
+            <div class="lamp">
+              <div class="gonna-give-light"></div>
+            </div>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section class="center">
+          <ul>
+            <li><a href="http://studio.substack.net/clown">http://studio.substack.net/clown</a></li>
+            <li><a href="http://aikelab.net/websynth/">http://aikelab.net/websynth/</a></li>
+            <li><a href="http://webaudio.prototyping.bbc.co.uk/ring-modulator/">http://webaudio.prototyping.bbc.co.uk/ring-modulator/</a></li>
+          </ul>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/clapper.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        history: true,
+        margin: 0.05,
+
+        width: '100%',
+        height: '100%',
+
+        center: false,
+        transition: 'linear',
+        backgroundTransition: 'slide',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
