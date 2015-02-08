@@ -40,21 +40,72 @@
 
         <section>
           <h1>Web Audio API</h1>
-          <h2>Kontroll &amp; Timing av Lyd</h2>
+          <h2>Full kontroll på lyden</h2>
+
+          <aside class="notes">
+            <p>
+              Mitt navn er Mikael Brevik og jeg er fagleder for frontend her i Bekk Trondheim.
+            </p>
+            <p>
+              I dag skal jeg prate kjapt om Web Audio API. Hva er det? Hvorfor trenger vi det og veldig grovt,
+              hvordan kan vi bruke det?
+            </p>
+            <p>
+              Og helt til slutt viser jeg et enkelt eksempel på hvordan vi kan bruke Web Audio API til å lage en "klapp"-trigger som lysbryter.
+            </p>
+          </aside>
         </section>
 
         <section>
 <pre><code data-trim class="html">
-&lt;bgsound src="missionimpossible.md" loop="infinite" /&gt;
+&lt;bgsound src="missionimpossible.midi" loop="infinite" /&gt;
 </code></pre>
           <aside class="notes">
+            <p>
+              Tilbake til den gode gamle IT-middelalderen, var dette den måten man kunne få en lyd på nettsiden sin.
+            </p>
+            <p>
+              Det var ingen kontroll på når man skulle spille, hvor lenge, i hvilket volum eller hvor i sangen man skulle starte.
+            </p>
+            <p>
+              Det var heller ikke veldig utbredt støtte for det. Det var ingen standard i en spec, men det var Microsoft som hadde
+              implementert det til Internet Explorer.
+            </p>
+            <p>
+              Når sant skal sies, kom det etterhvert noen flere alternativer, som ActiveX fra Microsoft eller gode gamle Flash.
+            </p>
+            <p>
+              Men det var fremdeles ingen god kontroll, eller god støtte. Og kanskje det var bra på den tiden og webutviklere ikke
+              var moden nok til å takle kraften av lyd.
+            </p>
           </aside>
         </section>
 
         <section data-background="./img/geocities1.png">
+            <aside class="notes">
+              <p>
+                Om <code>bgsound</code> var i IT-middelalderen, kan man kanskje si at Geocities var pesten. Er ikke sikkert
+                det er mange som husker Geocities, selv om det ikke er mer enn 6 år siden de slutta. Men dens peak var på
+                begynnelsen av 2000 tallet. Det var et hosting-selskap der man kunne legge ut egne sider - ukritisk av kvalitet.
+              </p>
+              <p>
+                På den tiden, og særlig da Geocities-sider, var det populært å bruke <code>bgsound</code>. Det fungerte da
+                selvfølgelig slik at når man gikk inn på siden så begynte det å spille musikk. Det var vanskelig å hindre
+                og det var ingen indikasjon på hvilken side som hadde denne musikken.
+              </p>
+              <p>
+                Ettersom båndbredden ikke var det beste og heller ikke støtten i nettleseren, var det ikke fin MP3 musikk som
+                ble spilt, men midi-filer.
+              </p>
+            </aside>
         </section>
 
         <section data-background="./img/geocities2.png">
+          <aside class="notes">
+            <p>
+              Her er noen ekstra eksempler på fine Geocities sider.
+            </p>
+          </aside>
         </section>
 
         <section data-background="./img/geocities3.png">
@@ -63,15 +114,48 @@
         <section data-background="./img/giforama.gif">
         </section>
 
-        <section data-background="./img/JavaScript-logo.png"  data-background-size="400px" data-background-repeat="repeat"></section>
-
         <section data-background="#0a3c59">
           <h1>Behov</h1>
           <h2>Trenger vi det?</h2>
 
           <aside class="notes">
+            <p>
+              Etter ganske mye tortur, ble det vel klart at dersom man skulle ha lyd i nettleseren, så trengte man mer kontroll.
+            </p>
+            <p>
+              Men er det slik at man trenger det? Hvorfor skal man ha så god kontroll på lyd i en nettleser?
+            </p>
+
+            <p>
+              Den åpenbare grunnen er nok spill. Dersom man implementerer spill i nettleseren er lyd et veldig viktig aspekt av
+              opplevelsen. Man må kunne ha nøyaktig timing på når en lyd skal starte og helst hvor den kommer fra i surround, og
+              kunne kombinere flere lyder.
+            </p>
+
+            <p>
+              Et annet åpenbart bruksområde for bedre kontroll på lyd vil jo være lyd-verktøy for avspilling og analyse.
+            </p>
+
+            <p>
+              Men det er ikke bare slike innlysende applikasjoner man kan bruke lyd til i nettleseren. Man kan bruke det til
+              å lage mye rikere nettsider, der lyd kan være en dimensjon av innholdet eller designet. Men man kan også bruke det
+              for å hjelpe brukere med særlige behov. F.eks kan man ha språkstøtte på siden, eller bruke lyd for å finne frem på
+              siden.
+            </p>
           </aside>
         </section>
+
+        <section data-background="./img/JavaScript-logo.png"  data-background-size="400px" data-background-repeat="repeat">
+
+          <aside class="notes">
+            <p>
+              Så, hvordan kan man oppnå full kontroll over lyd i nettleseren? Javascript! Mozilla har jobbet med et API som heter
+              Web Audio API som tillater kontroll av både timing og analysering av lyd!
+            </p>
+          </aside>
+
+        </section>
+
 
         <section data-background="#0a3c59">
           <h1>Hvordan?</h1>
@@ -85,7 +169,12 @@ var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             <p>
               Du vil som regel kun ha en audio context i dokumentet ditt. Det er mulig med flere,
               slik som du kan med f.eks Canvas Context, men som regel vil du at lyden din vil leve
-              i samme context.
+              i samme context. Slik kan man f.eks si at en lyd skal være påvirket av en annen, eller velge
+              at de kommer fra forskjellige retninger.
+            </p>
+            <p>
+              Ut i fra konteksten har man mange metoder man kan bruke, og det er et forholdsvis stort API, men
+              greit å skjønne når man ser det visualisert.
             </p>
           </aside>
         </section>
@@ -96,10 +185,15 @@ var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
           <img src="./img/audio_graph.png" alt="Audio Graph" width="600px" />
 
           <aside class="notes">
+            <p>Det finnes 4 forskjellige typer noder man kan lage:</p>
+
             <p>Source nodes: Sound sources such as audio buffers, live audio inputs, audio-tags, oscillators, and JS processors.</p>
             <p>Modification nodes: Filters, convolvers, panners, JS processors, etc.</p>
             <p>Analysis nodes: Analyzers and JS processors</p>
             <p>Destination nodes: Audio outputs and offline processing buffers</p>
+
+            <p>I tillegg til disse AudioNode-ne, har man noe som heter AudioParam, som er parameter for nodene. En node kan f.eks ha et parameter
+            for å stille på frekvensen, eller volumet.</p>
           </aside>
         </section>
 
@@ -116,6 +210,7 @@ gainNode.connect(audioCtx.destination);
 
           <aside class="notes">
             <p>
+              Her ser man hvordan man kan koble sammen forskjellige noder for å representere en graf.
             </p>
           </aside>
         </section>
@@ -124,6 +219,10 @@ gainNode.connect(audioCtx.destination);
           <img src="./img/audio_graph2.png" alt="Audio Graph" height="750px" />
 
           <aside class="notes">
+            <p>
+              Koden fra forrige slide vil lage en graf som dette.
+            </p>
+
           </aside>
         </section>
 
@@ -147,6 +246,42 @@ function playSound(buffer) {
 
           <aside class="notes">
             <p>
+              Her ser vi et eksempel på hvordan vi kan bruke en SourceNode til å spille av musikk som vi henter via et AJAX-kall.
+            </p>
+            <p>
+              Man må hente ut sangen som et buffer, altså liste over readonly binærdata, så må man dekode buffer-data for å så lage
+              en source node av det med gitt kontekst. Her ser vi også <code>source.start(0)</code> som sier start etter 0 sekunder.
+            </p>
+            <p>
+              Start er mer nøyaktig enn det f.eks setTimeout er. setTimeout lover deg bare at noe skal skje minimum etter X millisekunder,
+              den kommer ikke med en garanti om at etter X millisekunder så skjer det. En viktig del for timing av lyd med andre ord.
+            </p>
+            <p>
+              Vi ser også hvordan vi kan koble til høytalerene i dette tilfellet.
+            </p>
+          </aside>
+        </section>
+
+        <section>
+<pre><code data-trim class="javascript">
+var analyser = context.createAnalyser();
+analyser.smoothingTimeConstant = SMOOTHING;
+analyser.fftSize = FFT_SIZE;
+
+var freqs = new Uint8Array(this.analyser.frequencyBinCount);
+analyser.getByteFrequencyData(freqs);
+</code></pre>
+
+          <aside class="notes">
+            <p>
+              Her er et eksempel på en analyse-node. Spesifikt er dette for å finne frekvensdomenet fra inputten med FFT (fast fourier transformation).
+              Dette vil være en oversikt over frekvenser der x-aksen er frekvenser og y-aksen er insensiteten av frekvensen. Dette er noe
+              som ofte blir brukt for å analysere lyd. Fordelen er at man kan skille mellom forskjellige lyder og f.eks fjerne white noise.
+            </p>
+
+            <p>
+              fftSize er antall frekvenser vi ønsker å hente ut (i 2-erpotens), og smoothing er tidskonstanten for hvor mye man skal "fade ut" frekvenser
+              mellom utbytte. Dersom den er 0 vil det være veldig harde bytter mellom hver iterasjon eller hver tick av tid.
             </p>
           </aside>
         </section>
@@ -162,6 +297,9 @@ navigator.getUserMedia({ audio: true }, function (stream) {
 
           <aside class="notes">
             <p>
+              Her er et annet eksempel på en kilde-node. Om man bruker WebRTC og getUserMedia så kan man få tak i en media stream
+              som man kan da bruke direkte. Vi kan koble den via en analyse-node, hvor vi kan transformere den til FFT. Ved å bruke
+              Canvas-et kan vi tegne ut frekvensene og se hvilken data vi får inn via mikrofonen.
             </p>
           </aside>
         </section>
@@ -172,18 +310,33 @@ navigator.getUserMedia({ audio: true }, function (stream) {
           <canvas class="example-1-canvas"></canvas>
 
           <aside class="notes">
+            <p>
+              Her ser vi hvordan de to eksemplene fra tidligere kan flettes sammen og visualisere frekvensdomenet til lydene
+              som kommer fra mikrofonen.
+            </p>
+
+            <p>
+              Så om vi vil lage en bryter for å slå på og av et lys, kan vi bruke frekvensene til å prøve å kjenne igjen et
+              klapp. Om dere ser nå når jeg klapper, så ser vi at flesteparten av frekvensene blir høye i intensitet, i motsetning
+              til når jeg bare snakker da enkelte av frekvensene vil være høy i intensivitet.
+            </p>
+
+            <p>
+              Så, om vi bruker den informasjonen, kan vi lage en slags zero-crossing-variasjon for å detektere om det er klapp
+              eller ikke.
+            </p>
           </aside>
         </section>
 
         <section>
 <pre><code data-trim class="javascript">
-var crossings = filter(frequenceData, function (amp) {
+var crossings = filter(frequencyData, function (amp) {
   return amp >= threshold;
 }).length;
 
 var isClap = crossings > 20;
 if (isClap) numberCrossingsInRow++;
-if (!isClap && numberCrossingsInRow > 0) {
+if (!isClap &amp;&amp; numberCrossingsInRow > 0 &amp;&amp; numberCrossingsInRow &lt; 4) {
   numberCrossingsInRow = 0;
   doSomethingOnClap();
 }
