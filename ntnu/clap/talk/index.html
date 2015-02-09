@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Node.js: Del I</title>
+    <title>Web Audio API og klapping</title>
 
-    <meta name="description" content="Foredrag om bruk av streams i javascript">
+    <meta name="description" content="Foredrag om Web Audio API">
     <meta name="author" content="Mikael Brevik">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -98,17 +98,6 @@
                 ble spilt, men midi-filer.
               </p>
             </aside>
-        </section>
-
-        <section data-background="./img/geocities2.png">
-          <aside class="notes">
-            <p>
-              Her er noen ekstra eksempler på fine Geocities sider.
-            </p>
-          </aside>
-        </section>
-
-        <section data-background="./img/geocities3.png">
         </section>
 
         <section data-background="./img/giforama.gif">
@@ -264,6 +253,24 @@ function playSound(buffer) {
 
         <section>
 <pre><code data-trim class="javascript">
+navigator.getUserMedia({ audio: true }, function (stream) {
+  var source = context.createMediaStreamSource(stream);
+  source.connect(context.destination);
+}, console.error.bind(console));
+</code></pre>
+
+          <aside class="notes">
+            <p>
+              Her er et annet eksempel på en kilde-node. Om man bruker WebRTC og getUserMedia så kan man få tak i en media stream
+              som man kan da bruke direkte. I dette tilfellet spytter vi bare ut mikrofonen ut til høytalerene igjen, men vi kan
+              også gjøre mer med lyden. For eksempel kan vi analysere lyden som kommer inn.
+            </p>
+          </aside>
+        </section>
+
+
+        <section>
+<pre><code data-trim class="javascript">
 var analyser = context.createAnalyser();
 analyser.smoothingTimeConstant = SMOOTHING;
 analyser.fftSize = FFT_SIZE;
@@ -297,12 +304,12 @@ navigator.getUserMedia({ audio: true }, function (stream) {
 
           <aside class="notes">
             <p>
-              Her er et annet eksempel på en kilde-node. Om man bruker WebRTC og getUserMedia så kan man få tak i en media stream
-              som man kan da bruke direkte. Vi kan koble den via en analyse-node, hvor vi kan transformere den til FFT. Ved å bruke
-              Canvas-et kan vi tegne ut frekvensene og se hvilken data vi får inn via mikrofonen.
+              Om vi da tar den forrige analyse-koden (pluss litt Canvas-tegning) sammen med mikrofon-kildekoden vi hadde, kan
+              vi lage en slags equalizer av mikrofon-input. Altså vise frekvensdomenet av input lyd.
             </p>
           </aside>
         </section>
+
 
         <section>
           <h1>Visualisering</h1>
@@ -311,8 +318,7 @@ navigator.getUserMedia({ audio: true }, function (stream) {
 
           <aside class="notes">
             <p>
-              Her ser vi hvordan de to eksemplene fra tidligere kan flettes sammen og visualisere frekvensdomenet til lydene
-              som kommer fra mikrofonen.
+              Da vil det se ca slik som det her ut.
             </p>
 
             <p>
@@ -330,20 +336,33 @@ navigator.getUserMedia({ audio: true }, function (stream) {
 
         <section>
 <pre><code data-trim class="javascript">
-var crossings = filter(frequencyData, function (amp) {
+var maybeClap = filter(data, function (amp) {
   return amp >= threshold;
-}).length;
+}).length >= 20;
 
-var isClap = crossings > 20;
-if (isClap) numberCrossingsInRow++;
-if (!isClap &amp;&amp; numberCrossingsInRow > 0 &amp;&amp; numberCrossingsInRow &lt; 4) {
+if (maybeClap) numberCrossingsInRow++;
+
+if (!maybeClap &amp;&amp; numberCrossingsInRow > 0 &amp;&amp; numberCrossingsInRow &lt; numTimes) {
   numberCrossingsInRow = 0;
-  doSomethingOnClap();
+  return fn.call(this, data);
+}
+
+if (!maybeClap &amp;&amp; numberCrossingsInRow &lt; numTimes) {
+  numberCrossingsInRow = 0;
 }
 </code></pre>
 
           <aside class="notes">
             <p>
+              Her ser dere implementasjonen min av crossing-algoritmen. Den sjekker hvor mange frekvensbånd som
+              overstiger en viss grense. Dersom den gjør det i kort tid så er det et klapp.
+            </p>
+
+            <p>
+              Dersom man fordeler lyden slik at den skjer kun en gang per 40 ms, og jeg vet at et klapp kanskje varer
+              maks type 200 ms, vet jeg at jeg kan forvente frekvensene til å være over en viss grense i kanskje 4-5
+              iterasjoner av denne algoritmen. Så når jeg har sluttet å detektere "klapp" sjekker jeg hvor mange
+              iterasjoner det er. Dersom det er innenfor the sweet-spot, sier vi at det er en et klapp.
             </p>
           </aside>
         </section>
@@ -357,6 +376,20 @@ if (!isClap &amp;&amp; numberCrossingsInRow > 0 &amp;&amp; numberCrossingsInRow 
           </div>
 
           <aside class="notes">
+            <p>
+              Her er da den algoritmen kjørende. Og med litt flaks og stillet her nå skal jeg prøve å slå på
+              denne lyspæren ved å klappe.
+            </p>
+
+            <p>
+              Det fungerte bra! Får se om jeg får skrudde den av igjen.
+            </p>
+
+            <p>
+              Nå skal vi kjøre et lite eksperiment. Dersom alle nå klapper veldig unisont på 3 så skal vi se
+              om vi klarer å skru på lyset! Merk: Ingen garantier på at dette vil fungere. Jeg har ikke prøvd
+              dette med så mange mennesker før. Usikker på om prosjektet skalerer!
+            </p>
           </aside>
         </section>
 
@@ -368,7 +401,21 @@ if (!isClap &amp;&amp; numberCrossingsInRow > 0 &amp;&amp; numberCrossingsInRow 
           </ul>
 
           <aside class="notes">
+            <p>
+              Her er noen spreke eksempler enn det jeg klarer å koke opp. Om vi har tid til det kan vi
+              se et par eksempler og håpe på at jeg har lyd.
+            </p>
           </aside>
+        </section>
+
+
+        <section>
+          <h2>Les mer: <a href="http://bit.ly/webaudiobook">bit.ly/webaudiobook</a></h2>
+        </section>
+
+        <section>
+          <h1>Twitter: <a href="http://twitter.com/mikaelbrevik">@mikaelbrevik</a></h1>
+          <h3>Slides: <a href="http://git.mikaelb.net/presentations/ntnu/clap/talk/">git.mikaelb.net/presentations/ntnu/clap/talk</a></h3>
         </section>
 
       </div>

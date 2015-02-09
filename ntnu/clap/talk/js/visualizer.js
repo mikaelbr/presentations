@@ -19,7 +19,7 @@ var WIDTH = 640;
 var HEIGHT = 360;
 
 // Interesting parameters to tweak!
-var SMOOTHING = 0.8;
+var SMOOTHING = 0.4;
 var FFT_SIZE = 128;
 
 
@@ -44,11 +44,15 @@ function VisualizerSample() {
 // Toggle playback
 VisualizerSample.prototype.start = function() {
   var self = this;
+  if (self.isPlaying) {
+    self.isPlaying = false;
+    return;
+  }
   navigator.getUserMedia({ audio: true }, function (stream) {
     self.stream = stream;
     self.source = context.createMediaStreamSource(self.stream);
     self.source.connect(self.analyser);
-    requestAnimFrame(self.draw.bind(self));
+    setTimeout(self.draw.bind(self), 60);
     self.isPlaying = !self.isPlaying;
   }, console.log.bind(console));
 }
@@ -69,6 +73,7 @@ VisualizerSample.prototype.draw = function() {
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   // Draw the frequency domain chart.
+
   for (var i = 0; i < this.analyser.frequencyBinCount; i++) {
     var value = this.freqs[i];
     var percent = value / 256;
@@ -92,7 +97,7 @@ VisualizerSample.prototype.draw = function() {
   }
 
   if (this.isPlaying) {
-    requestAnimFrame(this.draw.bind(this));
+    setTimeout(this.draw.bind(this), 60);
   }
 }
 
