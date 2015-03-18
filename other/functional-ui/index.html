@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Versioning Paradise</title>
+
+    <meta name="description" content="Foredrag om bruk av streams i jsx">
+    <meta name="author" content="Mikael Brevik">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/bekk.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+<body>
+    <div class="heartrate-box">
+      <p><span class="heartrate-initial">N/A</span></p>
+      <canvas id="heartrate-graph" width="200" height="50"></canvas>
+    </div>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Funksjonelle UIs</h2>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Problemet</h2>
+          <h3>Ressonering rundt tilstand og grensesnitt, uforutsigbar oppførsel og komponérbarhet</h3>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Løsning</h2>
+          <h3>Funksjonell programmering: Unngå/abstrahere bort tilstandshåndtering</h3>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Referensiell transparens</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const timesTwo = (a) => a*2;
+
+timesTwo(2) + timesTwo(2)
+//=> 8
+
+2 * timesTwo(2)
+//=> 8
+
+4 + 4
+//=> 8
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Rene funksjoner</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+function pureFunction (input) {
+  // no side-effect
+  return input.split('').reverse().join('');
+}
+pureFunction()
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Urene funksjoner</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+var foo = 2;
+function unpureFunction (input) {
+  // side-effect
+  foo += 100;
+  return input.split('').reverse().join('');
+}
+
+> foo //=> 2
+> unpureFunction('foo') //=> oof
+> foo //=> ????
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Overraskende urene funksjoner</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+var obj = { foo: 'bar' };
+function unpureFunction (input) {
+  input.foo = 'foo';
+  return input;
+}
+
+> obj.foo //=> 'bar'
+> unpureFunction('foo').foo //=> 'foo'
+> obj.foo //=> 'foo' <-- OOPS
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Tette koblinger mellom funksjoner</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+var obj = { foo: 'bar' };
+const coupledOne = (input) => input.foo = 'foo';
+const coupledTwo = (input) =>
+  setTimeout(_ => console.log(input));
+
+> coupledTwo(obj) //=> 'foo' !!!!!
+> coupledOne(obj) //=> 'foo'
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Forutsigbarhet</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const timesTwo = (a) => a*2;
+> timesTwo(2) //=> 4
+> timesTwo(2) //=> 4
+> timesTwo(2) //=> 4
+> timesTwo(2) //=> 4
+> timesTwo(2) //=> 4
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">... gir testbarhet</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const timesTwo = (a) => a*2;
+expect(timesTwo(1)).to.equal(2)
+expect(timesTwo(2)).to.equal(4)
+expect(timesTwo(3)).to.equal(6)
+expect(timesTwo(-9999)).to.equal(-19998)
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Samme gjelder UI komponenter</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const myComp = component(
+  input => <h1>{input}</h1>
+);
+
+myComp('Hank Pym') //=> <h1>Hank Pym</h1>
+myComp('Sam Wilson') //=> <h1>Sam Wilson</h1>
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">DOM-en er en bi-effekt og en tilstandsblubbe</h2>
+        </section>
+
+        <section data-background="#0a3c59">
+          <div class="code">
+          <pre><code data-trim class="jsx">
+dom('#foo').innerHTML = 'bar'
+const coupledOne = (input) =>
+  input.innerText = 'foo';
+
+const coupledTwo = (input) =>
+  setTimeout(_ =>
+    console.log(input.innerText));
+
+> coupledTwo(dom('#foo')) //=> 'foo' !!!!!
+> coupledOne(dom('#foo')) //=> 'foo'
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">DOM-en som integrasjonspunkt</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const myComp = component(
+  i => <h1>{i}</h1>
+);
+const myCompTwo = component(
+  i => <h2>{myComp(i)}</h2>
+);
+
+const output = myComp('Hank Pym');
+const newOutput = output + myComp('Ant-Man');
+
+
+// Persistance somewhere
+domUpdate(newOutput);
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Nå med komposisjonsmuligheter™</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const myComp = component(
+  i => <h1>{i}</h1>
+);
+const myCompTwo = component(
+  i => <div>{myComp(i)}</div>
+);
+
+const output = myCompTwo('Hank Pym');
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Bygge opp med små byggesteiner</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const listItem = component(
+  i => <li>{i}</li>
+);
+
+const output = [
+  'Wade', 'Hank', 'Cable'
+].map(listItem);
+
+// output is not list of names
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const h1 = component(
+  i => <h1>{i}</h1>
+);
+const em = component(
+  i => <em>{i}</em>
+);
+
+const italicH1 = compose(h1, em);
+var output = italicH1('Wade Wilson');
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <div class="code">
+          <pre><code data-trim class="javascript">
+function compose (...fns) {
+  return (...args) =>
+    fns.reduceRight((child, fn) =>
+      fn.apply(this,
+        child ? args.concat(child) : args),
+      null);
+};
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Og derivere nye komponenter</h2>
+          <div class="code">
+          <pre><code data-trim class="jsx">
+const comp = component(
+  ({children, title}) => <div>
+    <h1>{title}</h1>
+    <p>{children</p>
+  </div>
+);
+
+const prefilledH1 = partial(comp, {
+  title: 'Always with title'
+});
+var output = prefilledH1('And now with body');
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Hva mer?</h2>
+          <div class="code">
+          <pre><code data-trim class="javascript">
+maybe(myComponent);
+memoize(myComponent);
+decorator(myComponent);
+compose(decorator1, decorator2, myComponent);
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">...eller enda mer?</h2>
+          <div class="code">
+          <pre><code data-trim class="javascript">
+Bacon
+  .fromEventTarget(el, 'click')
+  .throttle(400)
+  .map('Some Text')
+  .map(myComponent) // !!!!
+  .onValue(render);
+</code></pre></div>
+        </section>
+
+        <section data-background="#0a3c59">
+          <h2 class="stylish-text">Takk!</h2>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'slide',
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 1100px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+  </body>
+</html>
