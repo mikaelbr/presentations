@@ -31,30 +31,25 @@
 
   </head>
 <body>
-    <div class="heartrate-box">
-      <p><span class="heartrate-initial">N/A</span></p>
-      <canvas id="heartrate-graph" width="200" height="50"></canvas>
-    </div>
-
     <div class="reveal">
       <div class="slides">
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Funksjonelle UIs</h2>
+          <h2 class="stylish-text">Functional UI</h2>
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Problemet</h2>
-          <h3>Ressonering rundt tilstand og grensesnitt, uforutsigbar oppførsel og mangel på komponérbarhet</h3>
+          <h2 class="stylish-text">The Problem</h2>
+          <h3>Reasoning about state and views, unpredictable behaviour and lack of composability</h3>
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Løsning</h2>
-          <h3>Funksjonell programmering: Unngå/abstrahere bort tilstandshåndtering</h3>
+          <h2 class="stylish-text">Solution</h2>
+          <h3>Functional Programming: Avoid/abstract away state</h3>
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Referensiell transparens</h2>
+          <h2 class="stylish-text">Referential Transparency</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const timesTwo = (a) => a*2;
@@ -71,7 +66,7 @@ timesTwo(2) + timesTwo(2)
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Rene funksjoner</h2>
+          <h2 class="stylish-text">Pure Functions</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 function pureFunction (input) {
@@ -83,7 +78,7 @@ pureFunction()
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Urene funksjoner</h2>
+          <h2 class="stylish-text">Unpure Functions</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 var foo = 2;
@@ -100,7 +95,7 @@ function unpureFunction (input) {
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Overraskende urene funksjoner</h2>
+          <h2 class="stylish-text">Surprisingly Unpure Functions</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 var obj = { foo: 'bar' };
@@ -116,7 +111,7 @@ function unpureFunction (input) {
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Tette koblinger mellom funksjoner</h2>
+          <h2 class="stylish-text">Tight Coupling of Functions</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 var obj = { foo: 'bar' };
@@ -130,7 +125,7 @@ const coupledTwo = (input) =>
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Forutsigbarhet</h2>
+          <h2 class="stylish-text">Predictability</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const timesTwo = (a) => a*2;
@@ -143,7 +138,7 @@ const timesTwo = (a) => a*2;
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">... gir testbarhet</h2>
+          <h2 class="stylish-text">... gives testability</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const timesTwo = (a) => a*2;
@@ -155,7 +150,7 @@ expect(timesTwo(-9999)).to.equal(-19998)
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Samme gjelder UI komponenter</h2>
+          <h2 class="stylish-text">The Same Applies to UI/Components</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const myComp = component(
@@ -168,7 +163,7 @@ myComp('Sam Wilson') //=> <h1>Sam Wilson</h1>
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">DOM-en er en bi-effekt og en tilstandsblubbe</h2>
+          <h2 class="stylish-text">The DOM is a side-effekt and a blob of state</h2>
         </section>
 
         <section data-background="#0a3c59">
@@ -188,7 +183,7 @@ const coupledTwo = (input) =>
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">DOM-en som integrasjonspunkt</h2>
+          <h2 class="stylish-text">Treat DOM as an integration point</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const myComp = component(
@@ -208,7 +203,7 @@ domUpdate(newOutput);
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Nå med komposisjonsmuligheter™</h2>
+          <h2 class="stylish-text">Allows for Compositions</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const myComp = component(
@@ -223,7 +218,7 @@ const output = myCompTwo('Hank Pym');
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Bygge opp med små byggesteiner</h2>
+          <h2 class="stylish-text">Building Complexity by Composing</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const listItem = component(
@@ -267,7 +262,7 @@ function compose (...fns) {
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Og derivere nye komponenter</h2>
+          <h2 class="stylish-text">Derivate Functions/Components</h2>
           <div class="code">
           <pre><code data-trim class="jsx">
 const comp = component(
@@ -285,7 +280,7 @@ var output = prefilledH1('And now with body');
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Hva mer?</h2>
+          <h2 class="stylish-text">What next?</h2>
           <div class="code">
           <pre><code data-trim class="javascript">
 maybe(myComponent);
@@ -296,7 +291,7 @@ compose(decorator1, decorator2, myComponent);
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">...eller enda mer?</h2>
+          <h2 class="stylish-text">...or even?</h2>
           <div class="code">
           <pre><code data-trim class="javascript">
 Bacon
@@ -309,7 +304,7 @@ Bacon
         </section>
 
         <section data-background="#0a3c59">
-          <h2 class="stylish-text">Takk!</h2>
+          <h2 class="stylish-text">Thanks!</h2>
         </section>
 
       </div>
