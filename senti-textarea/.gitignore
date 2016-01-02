@@ -1,0 +1,15 @@
+!node_modules/
+
+node_modules/*
+!node_modules/remark-bekk/
+
+node_modules/remark-bekk/*
+!node_modules/remark-bekk/dist/
+!node_modules/remark-bekk/vendor/
+
+node_modules/remark-bekk/dist/*
+!node_modules/remark-bekk/dist/bekk.css
+!node_modules/remark-bekk/vendor/remark-0.11.0.min.js
+
+
+.DS_Store
