@@ -1,0 +1,26 @@
+{
+  "name": "senti-textarea",
+  "version": "1.0.0",
+  "description": "Slides and Example code for Sentiment Analysis as UX talk",
+  "main": "index.html",
+  "dependencies": {
+    "remark-bekk": "bekk/remark"
+  },
+  "private": true,
+  "devDependencies": {
+    "brfs": "^1.4.1",
+    "browserify": "^11.0.1",
+    "watch": "^0.16.0"
+  },
+  "scripts": {
+    "build": "browserify src/app.js -o dist/build.js",
+    "watch": "watch 'npm run build' ./slides ./src"
+  },
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
+  },
+  "author": "Mikael Brevik",
+  "license": "MIT"
+}

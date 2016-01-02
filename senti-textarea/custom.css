@@ -1,0 +1,28 @@
+.remark-slide .remark-slide-content.cover {
+  background-size: cover !important;
+  background-position: top left !important;
+}
+
+.remark-slide .remark-slide-content.midcover {
+  background-size: cover !important;
+  background-position: center left !important;
+}
+
+
+.tardis-slide {
+    position: relative;
+}
+
+.tardis-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -85px;
+  margin-top: -85px;
+}
+
+video {
+  margin: 0 auto;
+  height: 600px;
+  display: block;
+}

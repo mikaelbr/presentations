@@ -1,0 +1,2 @@
+- Troll og ekstremt negative ting i kommentarfelt er irriterende.
+- Hva er SA?
