@@ -1,0 +1,1 @@
+<button> (ReasonReact.stringToElement("Awesome!")) </button>;
